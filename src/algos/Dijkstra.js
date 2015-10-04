@@ -19,7 +19,7 @@ jKstra.Dijkstra = function(graph, opts) {
   function getFlags(v) {
     return v[flagKey] || {};
   }
-  
+
   function setFlags(v, flags) {
     if(!v.hasOwnProperty(flagKey)) {
       v[flagKey] = {};
@@ -27,8 +27,8 @@ jKstra.Dijkstra = function(graph, opts) {
     for(var key in flags) {
       v[flagKey][key] = flags[key];
     }
-  } 
-  
+  }
+
   /**
   @param v {Vertex}
   @param incEge {Edge} the incoming edge
@@ -41,14 +41,14 @@ jKstra.Dijkstra = function(graph, opts) {
       action(v, incEdge, cost);
     }
   }
-  
+
   function settle(v, action) {
     setFlags(v, {state:SETTLED});
     if(action) {
       action(v);
     }
   }
-  
+
   function rebuildPath(end) {
     var edges = [];
     var edge;
@@ -61,16 +61,16 @@ jKstra.Dijkstra = function(graph, opts) {
   }
 
   var defaultTraversalOptions = {
-    shouldUpdateKey: function(prevCost, newCost) { 
+    shouldUpdateKey: function(prevCost, newCost) {
       return newCost < prevCost;
     },
     edgeCost: function(e, costDone) {
       return 1;
     },
-    isFinished: function(direction) { 
+    isFinished: function(direction) {
       return false;
     },
-    onReach: null,    // nothing special to do when reaching a node 
+    onReach: null,    // nothing special to do when reaching a node
     onSettle: null,   // nothing special to do when setting a node
     edgeFilter: null  // take all edges
   }
@@ -93,7 +93,7 @@ jKstra.Dijkstra = function(graph, opts) {
       }
       return null;
     },
-    
+
     /**
     Traverse the graph using Dijkstra's algorithm,
     starting from source, with the specified options
@@ -106,30 +106,30 @@ jKstra.Dijkstra = function(graph, opts) {
 
       // reset node tagging
       clearFlags();
-    
+
       var kv;
       var u, v;
       var e;
       var totalCost, eCost;
       var vFlags;
-      
+
       var Q = new jKstra.PriorityQueue();
       Q.insert(source, 0);
       reach(source, null, 0, options.onReach);
-      
+
       while(!options.isFinished(true) && Q.count() > 0) {
         kv = Q.pop();
         u = kv.elt;
         totalCost = kv.key;
         settle(u, options.onSettle);
-        
+
         var edges = graph.outEdges(u, options.edgeFilter);
         for(var i=0; i < edges.length; i++) {
           e = edges[i];
           v = e.to;
           eCost = totalCost + options.edgeCost(e, totalCost);
           vFlags = getFlags(v);
-          
+
           if(vFlags.state != SETTLED) {
             if(vFlags.state != REACHED) {
               Q.insert(v, eCost);
@@ -143,7 +143,7 @@ jKstra.Dijkstra = function(graph, opts) {
           }
         }
       }
-      
+
       // if false, means the whole graph was traversed
       return options.isFinished(true);
     }

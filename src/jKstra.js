@@ -2,5 +2,5 @@
 
 var jKstra = {
   OUT: true,
-  IN: false 
+  IN: false
 };

@@ -9,7 +9,7 @@ jKstra.PriorityQueue = function(opts) {
   function compare(a, b) {
     return a.key - b.key;
   }
-  
+
   function bubbleUp(idx) {
     var element = heap[idx],
         parentIdx,
@@ -49,11 +49,11 @@ jKstra.PriorityQueue = function(opts) {
         if (compare(lChild, element) < 0) {
           swapIdx = lChildIdx;
         }
-        
+
         // unless there is another lesser child, which will be the one swapped
         if (rChildIdx < length) {
           var rChild = heap[rChildIdx];
-          if ((swapIdx == -1 || compare(rChild, lChild) < 0) && 
+          if ((swapIdx == -1 || compare(rChild, lChild) < 0) &&
               compare(rChild, element) < 0)
             swapIdx = rChildIdx;
         }
@@ -81,7 +81,7 @@ jKstra.PriorityQueue = function(opts) {
     }
     return idx;
   }
-  
+
   return {
     count: function() {
       return heap.length;
@@ -109,14 +109,14 @@ jKstra.PriorityQueue = function(opts) {
       }
       return elt;
     },
-    
+
     peek: function() {
       if(heap.length == 0) {
-        throw new Error('Empty queue');    
+        throw new Error('Empty queue');
       }
       return heap[0];
     },
-    
+
     updateKey: function(element, newKey) {
       var idx = findElementIndex(element);
       if(idx == -1) {
@@ -129,6 +129,6 @@ jKstra.PriorityQueue = function(opts) {
       } else {
         sinkDown(idx);
       }
-    }    
+    }
   }
 }

@@ -13,7 +13,7 @@ jKstra.Graph = function (opts) {
       vertices.push(vertex);
       return vertex;
     },
-    
+
     addEdge: function(from, to, data) {
       var edge = {
         from: from,
@@ -36,7 +36,7 @@ jKstra.Graph = function (opts) {
         this.addEdge(b, a, data)
       ];
     },
-    
+
     removeEdge: function(edge) {
       var index = edges.indexOf(edge);
       if(index != -1) {
@@ -47,7 +47,7 @@ jKstra.Graph = function (opts) {
         edges.splice(index, 1);
       }
     },
-    
+
     removeVertex: function(vertex) {
       var index = vertices.indexOf(vertex);
       if(index != -1) {
@@ -59,18 +59,18 @@ jKstra.Graph = function (opts) {
         vertices.splice(index, 1);
       }
     },
-    
+
     outEdges: function(vertex, filter) {
       return this.incidentEdges(vertex, true, filter);
     },
-    
+
     inEdges: function(vertex, filter) {
       return this.incidentEdges(vertex, false, filter);
     },
-    
+
     /**
     Returns all edges incident to a vertex, in one direction (outgoing or incoming),
-    optionnaly filtered by a given function. 
+    optionnaly filtered by a given function.
     */
     incidentEdges: function(vertex, direction, filter) {
       if(typeof filter == 'undefined' || filter == null) {
@@ -79,7 +79,7 @@ jKstra.Graph = function (opts) {
       var edges = direction ? vertex._out : vertex._in;
       return edges.filter(filter);
     },
-    
+
     vertex: function(props) {
       var v = null;
       for(var i = 0, l = vertices.length; i < l && v == null; i++) {
@@ -108,7 +108,7 @@ jKstra.Graph = function (opts) {
         action(vertices[i]);
       }
     },
-    
+
     /**
     Perform an action on each edge of the graph
     */
@@ -117,5 +117,5 @@ jKstra.Graph = function (opts) {
         action(edges[i]);
       }
     }
-  } 
+  }
 }
