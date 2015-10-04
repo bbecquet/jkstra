@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Small JavaScript graph routing library",
   "author": "Benjamin Becquet",
+  "repository": "bbecquet/jKstra",
   "keywords": [
     "graph",
     "routing",
@@ -14,12 +15,12 @@
     "test": "make test"
   },
   "devDependencies": {
-    "grunt": "*",
-    "mocha": "*",
     "chai": "*",
-    "mocha-phantomjs": "*",
-    "grunt-contrib-concat": "*",
-    "grunt-contrib-watch": "~0.6.1"
+    "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-watch": "^4.3.5",
+    "mocha": "*",
+    "mocha-phantomjs": "*"
   },
   "directories": {
     "test": "test"
