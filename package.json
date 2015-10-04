@@ -25,5 +25,5 @@
   "directories": {
     "test": "test"
   },
-  "license": "BSD-2-Clause"
+  "license": "MIT"
 }
