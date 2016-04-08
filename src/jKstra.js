@@ -1,6 +1,6 @@
-"use strict";
 
-var jKstra = {
-  OUT: true,
-  IN: false
+const jKstra = {
+
 };
+
+export default jKstra;
