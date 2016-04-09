@@ -1,9 +1,10 @@
-import { REACHED, SETTLED } from './status.js';
 import PriorityQueue from '../core/PriorityQueue.js';
+const SETTLED = 2;
+const REACHED = 1;
 
 function Dijkstra(graph, opts) {
-    const optsss = Object.assign({ flagKey: '_dijkstra' }, opts);
-    let flagKey = optsss.flagKey;
+    const options = Object.assign({ flagKey: '_dijkstra' }, opts);
+    let flagKey = options.flagKey;
 
     function clearFlags() {
         graph.forEachVertex(function(v) {
@@ -79,10 +80,10 @@ function Dijkstra(graph, opts) {
                 return getFlags(target).state === SETTLED;
             }
 
-            const optsss = opts || {};
-            optsss.isFinished = isTargetFound;
+            const options = opts || {};
+            options.isFinished = isTargetFound;
 
-            const found = this.traverse(source, optsss);
+            const found = this.traverse(source, options);
             if(found) {
                 return rebuildPath(target);
             }
@@ -91,10 +92,10 @@ function Dijkstra(graph, opts) {
 
         /**
         Traverse the graph using Dijkstra's algorithm,
-        starting from source, with the specified optsss
+        starting from source, with the specified options
         */
         traverse: function(source, opts) {
-            const optsss = Object.assign(opts, defaultTraversalOptions);
+            const options = Object.assign({}, defaultTraversalOptions, opts);
 
             // reset node tagging
             clearFlags();
@@ -107,30 +108,30 @@ function Dijkstra(graph, opts) {
 
             const Q = new PriorityQueue();
             Q.insert(source, 0);
-            reach(source, null, 0, optsss.onReach);
+            reach(source, null, 0, options.onReach);
 
-            while(!optsss.isFinished(true) && Q.count() > 0) {
+            while(!options.isFinished() && Q.count() > 0) {
                 kv = Q.pop();
                 u = kv.elt;
                 totalCost = kv.key;
-                settle(u, optsss.onSettle);
+                settle(u, options.onSettle);
 
-                const edges = graph.outEdges(u, optsss.edgeFilter);
+                const edges = graph.outEdges(u, options.edgeFilter);
                 for(let i = 0; i < edges.length; i++) {
                     e = edges[i];
                     v = e.to;
-                    eCost = totalCost + optsss.edgeCost(e, totalCost);
+                    eCost = totalCost + options.edgeCost(e, totalCost);
                     vFlags = getFlags(v);
 
                     if(vFlags.state !== SETTLED) {
                         if(vFlags.state !== REACHED) {
                             Q.insert(v, eCost);
-                            reach(v, e, eCost, optsss.onReach);
+                            reach(v, e, eCost, options.onReach);
                         } else {
-                            if (optsss.shouldUpdateKey(vFlags.cost, eCost, vFlags.inc, e)) {
+                            if (options.shouldUpdateKey(vFlags.cost, eCost, vFlags.inc, e)) {
                             // else if (eCost < vFlags.cost) { // if already reached but new cost is less than current
                                 Q.updateKey(v, eCost);
-                                reach(v, e, eCost, optsss.onReach);
+                                reach(v, e, eCost, options.onReach);
                             }
                         }
                     }
@@ -138,7 +139,7 @@ function Dijkstra(graph, opts) {
             }
 
             // if false, means the whole graph was traversed
-            return optsss.isFinished(true);
+            return options.isFinished();
         }
     };
 };

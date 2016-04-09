@@ -9,8 +9,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 var _const = require('../core/const.js');
 
 function BFS(graph, opts) {
-    var optsss = _extends({ flagKey: '_bfs' }, opts);
-    var flagKey = optsss.flagKey;
+    var options = _extends({ flagKey: '_bfs' }, opts);
+    var flagKey = options.flagKey;
 
     function clearFlags() {
         graph.forEachVertex(function (v) {
@@ -36,10 +36,10 @@ function BFS(graph, opts) {
     return {
         /**
         Traverse the graph using the breadth first algorithm,
-        starting from source, with the specified optsss
+        starting from source, with the specified options
         */
         traverse: function traverse(source, opts) {
-            var optsss = _extends(opts, defaultTraversalOptions);
+            var options = _extends({}, defaultTraversalOptions, opts);
 
             clearFlags();
 
@@ -52,11 +52,11 @@ function BFS(graph, opts) {
 
             while (queue.length > 0) {
                 u = queue.shift();
-                optsss.onVisit(u);
-                edges = graph.incidentEdges(u, optsss.direction, optsss.edgeFilter);
+                options.onVisit(u);
+                edges = graph.incidentEdges(u, options.direction, options.edgeFilter);
                 edges.forEach(function (e) {
-                    optsss.onTestEdge(e);
-                    v = optsss.direction ? e.to : e.from;
+                    options.onTestEdge(e);
+                    v = options.direction ? e.to : e.from;
                     if (!isMarked(v)) {
                         mark(v);
                         queue.push(v);

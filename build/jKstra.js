@@ -10,8 +10,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 var _const = require('../core/const.js');
 
 function BFS(graph, opts) {
-    var optsss = _extends({ flagKey: '_bfs' }, opts);
-    var flagKey = optsss.flagKey;
+    var options = _extends({ flagKey: '_bfs' }, opts);
+    var flagKey = options.flagKey;
 
     function clearFlags() {
         graph.forEachVertex(function (v) {
@@ -37,10 +37,10 @@ function BFS(graph, opts) {
     return {
         /**
         Traverse the graph using the breadth first algorithm,
-        starting from source, with the specified optsss
+        starting from source, with the specified options
         */
         traverse: function traverse(source, opts) {
-            var optsss = _extends(opts, defaultTraversalOptions);
+            var options = _extends({}, defaultTraversalOptions, opts);
 
             clearFlags();
 
@@ -53,11 +53,11 @@ function BFS(graph, opts) {
 
             while (queue.length > 0) {
                 u = queue.shift();
-                optsss.onVisit(u);
-                edges = graph.incidentEdges(u, optsss.direction, optsss.edgeFilter);
+                options.onVisit(u);
+                edges = graph.incidentEdges(u, options.direction, options.edgeFilter);
                 edges.forEach(function (e) {
-                    optsss.onTestEdge(e);
-                    v = optsss.direction ? e.to : e.from;
+                    options.onTestEdge(e);
+                    v = options.direction ? e.to : e.from;
                     if (!isMarked(v)) {
                         mark(v);
                         queue.push(v);
@@ -70,7 +70,7 @@ function BFS(graph, opts) {
 
 exports.default = BFS;
 module.exports = exports['default'];
-},{"../core/const.js":6}],2:[function(require,module,exports){
+},{"../core/const.js":5}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -79,17 +79,18 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _status = require('./status.js');
-
 var _PriorityQueue = require('../core/PriorityQueue.js');
 
 var _PriorityQueue2 = _interopRequireDefault(_PriorityQueue);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var SETTLED = 2;
+var REACHED = 1;
+
 function Dijkstra(graph, opts) {
-    var optsss = _extends({ flagKey: '_dijkstra' }, opts);
-    var flagKey = optsss.flagKey;
+    var options = _extends({ flagKey: '_dijkstra' }, opts);
+    var flagKey = options.flagKey;
 
     function clearFlags() {
         graph.forEachVertex(function (v) {
@@ -117,14 +118,14 @@ function Dijkstra(graph, opts) {
     */
     function reach(v, incEdge, cost, action) {
         // update state to "reached", and register cost and incomingEdge
-        setFlags(v, { state: _status.REACHED, cost: cost, inc: incEdge });
+        setFlags(v, { state: REACHED, cost: cost, inc: incEdge });
         if (action) {
             action(v, incEdge, cost);
         }
     }
 
     function settle(v, action) {
-        setFlags(v, { state: _status.SETTLED });
+        setFlags(v, { state: SETTLED });
         if (action) {
             action(v);
         }
@@ -162,13 +163,13 @@ function Dijkstra(graph, opts) {
         */
         shortestPath: function shortestPath(source, target, opts) {
             function isTargetFound() {
-                return getFlags(target).state === _status.SETTLED;
+                return getFlags(target).state === SETTLED;
             }
 
-            var optsss = opts || {};
-            optsss.isFinished = isTargetFound;
+            var options = opts || {};
+            options.isFinished = isTargetFound;
 
-            var found = this.traverse(source, optsss);
+            var found = this.traverse(source, options);
             if (found) {
                 return rebuildPath(target);
             }
@@ -177,10 +178,10 @@ function Dijkstra(graph, opts) {
 
         /**
         Traverse the graph using Dijkstra's algorithm,
-        starting from source, with the specified optsss
+        starting from source, with the specified options
         */
         traverse: function traverse(source, opts) {
-            var optsss = _extends(opts, defaultTraversalOptions);
+            var options = _extends({}, defaultTraversalOptions, opts);
 
             // reset node tagging
             clearFlags();
@@ -195,30 +196,30 @@ function Dijkstra(graph, opts) {
 
             var Q = new _PriorityQueue2.default();
             Q.insert(source, 0);
-            reach(source, null, 0, optsss.onReach);
+            reach(source, null, 0, options.onReach);
 
-            while (!optsss.isFinished(true) && Q.count() > 0) {
+            while (!options.isFinished() && Q.count() > 0) {
                 kv = Q.pop();
                 u = kv.elt;
                 totalCost = kv.key;
-                settle(u, optsss.onSettle);
+                settle(u, options.onSettle);
 
-                var edges = graph.outEdges(u, optsss.edgeFilter);
+                var edges = graph.outEdges(u, options.edgeFilter);
                 for (var i = 0; i < edges.length; i++) {
                     e = edges[i];
                     v = e.to;
-                    eCost = totalCost + optsss.edgeCost(e, totalCost);
+                    eCost = totalCost + options.edgeCost(e, totalCost);
                     vFlags = getFlags(v);
 
-                    if (vFlags.state !== _status.SETTLED) {
-                        if (vFlags.state !== _status.REACHED) {
+                    if (vFlags.state !== SETTLED) {
+                        if (vFlags.state !== REACHED) {
                             Q.insert(v, eCost);
-                            reach(v, e, eCost, optsss.onReach);
+                            reach(v, e, eCost, options.onReach);
                         } else {
-                            if (optsss.shouldUpdateKey(vFlags.cost, eCost, vFlags.inc, e)) {
+                            if (options.shouldUpdateKey(vFlags.cost, eCost, vFlags.inc, e)) {
                                 // else if (eCost < vFlags.cost) { // if already reached but new cost is less than current
                                 Q.updateKey(v, eCost);
-                                reach(v, e, eCost, optsss.onReach);
+                                reach(v, e, eCost, options.onReach);
                             }
                         }
                     }
@@ -226,22 +227,14 @@ function Dijkstra(graph, opts) {
             }
 
             // if false, means the whole graph was traversed
-            return optsss.isFinished(true);
+            return options.isFinished();
         }
     };
 };
 
 exports.default = Dijkstra;
 module.exports = exports['default'];
-},{"../core/PriorityQueue.js":5,"./status.js":3}],3:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var SETTLED = exports.SETTLED = 2;
-var REACHED = exports.REACHED = 1;
-},{}],4:[function(require,module,exports){
+},{"../core/PriorityQueue.js":4}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -372,7 +365,7 @@ var Graph = function Graph(opts) {
 
 exports.default = Graph;
 module.exports = exports['default'];
-},{"./const.js":6,"./utils.js":7}],5:[function(require,module,exports){
+},{"./const.js":5,"./utils.js":6}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -516,7 +509,7 @@ var PriorityQueue = function PriorityQueue(opts) {
 
 exports.default = PriorityQueue;
 module.exports = exports['default'];
-},{}],6:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -524,7 +517,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 var OUT = exports.OUT = true;
 var IN = exports.IN = false;
-},{}],7:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -561,7 +554,7 @@ function propsMatch(set, subSet) {
     }
     return match;
 };
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -592,4 +585,4 @@ var jKstra = {
 
 exports.default = jKstra;
 module.exports = exports['default'];
-},{"./algos/BFS.js":1,"./algos/Dijkstra.js":2,"./core/Graph.js":4}]},{},[8]);
+},{"./algos/BFS.js":1,"./algos/Dijkstra.js":2,"./core/Graph.js":3}]},{},[7]);

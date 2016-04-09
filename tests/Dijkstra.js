@@ -12,12 +12,12 @@ describe('Dijkstra', function() {
         n = [];
         e = [];
 
+        n.push(graph.addVertex(0));
         n.push(graph.addVertex(1));
         n.push(graph.addVertex(2));
         n.push(graph.addVertex(3));
         n.push(graph.addVertex(4));
         n.push(graph.addVertex(5));
-        n.push(graph.addVertex(6));
 
         e.push(graph.addEdge(n[0], n[1], 7)); // 0
         e.push(graph.addEdge(n[0], n[2], 9)); // 1
@@ -32,6 +32,8 @@ describe('Dijkstra', function() {
         dijkstra = new Dijkstra(graph);
     });
 
+    // TODO: test traversal order, onReach/onSettle and filters
+
     describe('shortestPath()', function() {
         it('returns null (path not found) between two unroutable nodes', function() {
             assert.isNull(dijkstra.shortestPath(n[1], n[0]));
@@ -45,7 +47,9 @@ describe('Dijkstra', function() {
         });
 
         it('returns the shortest path as an edge array', function() {
-            const path = dijkstra.shortestPath(n[0], n[4], { edgeCost: function(e) { return(e.data); } });
+            const path = dijkstra.shortestPath(n[0], n[4], {
+                edgeCost: e => e.data
+            });
             assert.isArray(path);
             assert.deepEqual(path, [e[1], e[5], e[8]]);
         });
