@@ -25,14 +25,23 @@ describe('Dijkstra', function() {
         e.push(graph.addEdge(n[1], n[2], 10));// 3
         e.push(graph.addEdge(n[1], n[3], 15));// 4
         e.push(graph.addEdge(n[2], n[5], 2)); // 5
-        e.push(graph.addEdge(n[2], n[3], 11));// 6
+        e.push(graph.addEdge(n[2], n[3], 12));// 6
         e.push(graph.addEdge(n[3], n[4], 6)); // 7
         e.push(graph.addEdge(n[5], n[4], 9)); // 8
 
         dijkstra = new Dijkstra(graph);
     });
 
-    // TODO: test traversal order, onReach/onSettle and filters
+    describe('traverse()', function() {
+        it('visits the node from lower to higher cost from the source', function() {
+            const traversalOrder = [];
+            dijkstra.traverse(n[0], {
+                edgeCost: e => e.data,
+                onSettle: node => { traversalOrder.push(node.data); }
+            });
+            assert.equal(traversalOrder.join(), '0,1,2,5,4,3');
+        });
+    });
 
     describe('shortestPath()', function() {
         it('returns null (path not found) between two unroutable nodes', function() {
