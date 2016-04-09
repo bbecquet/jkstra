@@ -1,10 +1,10 @@
 /* eslint-env mocha */
 
 import { assert } from 'chai';
-import { OUT } from 'core/const.js';
-import PriorityQueue from 'core/PriorityQueue.js';
-import Graph from 'core/Graph.js';
-import Dijkstra from 'algos/Dijkstra.js';
+import { OUT } from '../dist/core/const.js';
+import PriorityQueue from '../dist/core/PriorityQueue.js';
+import Graph from '../dist/core/Graph.js';
+import Dijkstra from '../dist/algos/Dijkstra.js';
 
 describe('Graph', function() {
     let G;

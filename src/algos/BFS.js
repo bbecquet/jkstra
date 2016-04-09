@@ -1,14 +1,8 @@
-import extend from '../core/utils.js';
 import { OUT } from '../core/const.js';
 
 function BFS(graph, opts) {
-    const options = extend(
-        {
-            flagKey: '_bfs'
-        },
-        opts
-    );
-    const flagKey = options.flagKey;
+    const optsss = Object.assign({ flagKey: '_bfs' }, opts);
+    const flagKey = optsss.flagKey;
 
     function clearFlags() {
         graph.forEachVertex(function(v) {
@@ -34,13 +28,10 @@ function BFS(graph, opts) {
     return {
         /**
         Traverse the graph using the breadth first algorithm,
-        starting from source, with the specified options
+        starting from source, with the specified optsss
         */
         traverse: function(source, opts) {
-            const options = extend(
-                defaultTraversalOptions,
-                opts
-            );
+            const optsss = Object.assign(opts, defaultTraversalOptions);
 
             clearFlags();
 
@@ -51,11 +42,11 @@ function BFS(graph, opts) {
 
             while(queue.length > 0) {
                 u = queue.shift();
-                options.onVisit(u);
-                edges = graph.incidentEdges(u, options.direction, options.edgeFilter);
+                optsss.onVisit(u);
+                edges = graph.incidentEdges(u, optsss.direction, optsss.edgeFilter);
                 edges.forEach(function(e) {
-                    options.onTestEdge(e);
-                    v = options.direction ? e.to : e.from;
+                    optsss.onTestEdge(e);
+                    v = optsss.direction ? e.to : e.from;
                     if(!isMarked(v)) {
                         mark(v);
                         queue.push(v);

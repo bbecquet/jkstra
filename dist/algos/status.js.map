@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../src/algos/status.js"],"names":[],"mappings":";;;;;AAAO,IAAM,4BAAU,CAAV;AACN,IAAM,4BAAU,CAAV","file":"status.js","sourcesContent":["export const SETTLED = 2;\nexport const REACHED = 1;\n"]}
