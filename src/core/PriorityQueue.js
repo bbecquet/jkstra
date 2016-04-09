@@ -6,6 +6,7 @@ with an updateKey method.
 const PriorityQueue = function(opts) {
     const heap = [];
 
+    // TODO: make it an option, for max or min priority queue
     function compare(a, b) {
         return a.key - b.key;
     }

@@ -248,7 +248,7 @@ var _const = require('./const.js');
 
 var _utils = require('./utils.js');
 
-var Graph = function Graph(opts) {
+var Graph = function Graph() {
     var vertices = [];
     var edges = [];
 
@@ -346,9 +346,9 @@ var Graph = function Graph(opts) {
         Perform an action on each vertex of the graph
         */
         forEachVertex: function forEachVertex(action) {
-            for (var i = 0, l = vertices.length; i < l; i++) {
-                action(vertices[i]);
-            }
+            vertices.forEach(function (v) {
+                return action(v);
+            });
         },
 
 
@@ -356,9 +356,9 @@ var Graph = function Graph(opts) {
         Perform an action on each edge of the graph
         */
         forEachEdge: function forEachEdge(action) {
-            for (var i = 0, l = edges.length; i < l; i++) {
-                action(edges[i]);
-            }
+            edges.forEach(function (e) {
+                return action(e);
+            });
         }
     };
 };
@@ -379,6 +379,7 @@ with an updateKey method.
 var PriorityQueue = function PriorityQueue(opts) {
     var heap = [];
 
+    // TODO: make it an option, for max or min priority queue
     function compare(a, b) {
         return a.key - b.key;
     }

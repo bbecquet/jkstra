@@ -11,6 +11,7 @@ with an updateKey method.
 var PriorityQueue = function PriorityQueue(opts) {
     var heap = [];
 
+    // TODO: make it an option, for max or min priority queue
     function compare(a, b) {
         return a.key - b.key;
     }

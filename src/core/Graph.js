@@ -1,7 +1,7 @@
 import { IN, OUT } from './const.js';
 import { propsMatch } from './utils.js';
 
-const Graph = function(opts) {
+const Graph = function() {
     const vertices = [];
     const edges = [];
 
@@ -106,18 +106,14 @@ const Graph = function(opts) {
         Perform an action on each vertex of the graph
         */
         forEachVertex(action) {
-            for(let i = 0, l = vertices.length; i < l; i++) {
-                action(vertices[i]);
-            }
+            vertices.forEach(v => action(v));
         },
 
         /**
         Perform an action on each edge of the graph
         */
         forEachEdge(action) {
-            for(let i = 0, l = edges.length; i < l; i++) {
-                action(edges[i]);
-            }
+            edges.forEach(e => action(e));
         }
     };
 };
