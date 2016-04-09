@@ -79,11 +79,11 @@ const PriorityQueue = function(opts) {
     }
 
     return {
-        count: function() {
+        count() {
             return heap.length;
         },
 
-        insert: function(element, key) {
+        insert(element, key) {
             if (typeof element === 'undefined') {
                 throw new Error('No element provided');
             }
@@ -91,7 +91,7 @@ const PriorityQueue = function(opts) {
             bubbleUp(heap.length - 1);
         },
 
-        pop: function() {
+        pop() {
             if(heap.length === 0) {
                 throw new Error('Empty queue');
             }
@@ -106,14 +106,14 @@ const PriorityQueue = function(opts) {
             return elt;
         },
 
-        peek: function() {
+        peek() {
             if(heap.length === 0) {
                 throw new Error('Empty queue');
             }
             return heap[0];
         },
 
-        updateKey: function(element, newKey) {
+        updateKey(element, newKey) {
             const idx = findElementIndex(element);
             if(idx === -1) {
                 throw new Error('The element is not in the heap');

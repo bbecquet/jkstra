@@ -22,7 +22,6 @@ var Graph = function Graph(opts) {
             vertices.push(vertex);
             return vertex;
         },
-
         addEdge: function addEdge(from, to, data) {
             var edge = {
                 from: from,
@@ -35,6 +34,7 @@ var Graph = function Graph(opts) {
             return edge;
         },
 
+
         /**
         Shortcut to add an edge and its reverse,
         sharing the same data.
@@ -42,7 +42,6 @@ var Graph = function Graph(opts) {
         addEdgePair: function addEdgePair(a, b, data) {
             return [this.addEdge(a, b, data), this.addEdge(b, a, data)];
         },
-
         removeEdge: function removeEdge(edge) {
             var index = edges.indexOf(edge);
             if (index !== -1) {
@@ -53,7 +52,6 @@ var Graph = function Graph(opts) {
                 edges.splice(index, 1);
             }
         },
-
         removeVertex: function removeVertex(vertex) {
             var index = vertices.indexOf(vertex);
             if (index !== -1) {
@@ -65,14 +63,13 @@ var Graph = function Graph(opts) {
                 vertices.splice(index, 1);
             }
         },
-
         outEdges: function outEdges(vertex, filter) {
             return this.incidentEdges(vertex, _const.OUT, filter);
         },
-
         inEdges: function inEdges(vertex, filter) {
             return this.incidentEdges(vertex, _const.IN, filter);
         },
+
 
         /**
         Returns all edges incident to a vertex, in one direction (outgoing or incoming),
@@ -85,7 +82,6 @@ var Graph = function Graph(opts) {
             var edges = direction ? vertex._out : vertex._in;
             return edges.filter(filter);
         },
-
         vertex: function vertex(props) {
             var v = null;
             for (var i = 0, l = vertices.length; i < l && v == null; i++) {
@@ -95,7 +91,6 @@ var Graph = function Graph(opts) {
             }
             return v;
         },
-
         edge: function edge(props) {
             var e = null;
             for (var i = 0, l = edges.length; i < l && e == null; i++) {
@@ -106,6 +101,7 @@ var Graph = function Graph(opts) {
             return e;
         },
 
+
         /**
         Perform an action on each vertex of the graph
         */
@@ -114,6 +110,7 @@ var Graph = function Graph(opts) {
                 action(vertices[i]);
             }
         },
+
 
         /**
         Perform an action on each edge of the graph

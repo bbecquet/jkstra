@@ -39,6 +39,7 @@ function BFS(graph, opts) {
         Traverse the graph using the breadth first algorithm,
         starting from source, with the specified options
         */
+
         traverse: function traverse(source, opts) {
             var options = _extends({}, defaultTraversalOptions, opts);
 
@@ -161,6 +162,7 @@ function Dijkstra(graph, opts) {
         /**
         The most common use of Dijkstra traversal
         */
+
         shortestPath: function shortestPath(source, target, opts) {
             function isTargetFound() {
                 return getFlags(target).state === SETTLED;
@@ -175,6 +177,7 @@ function Dijkstra(graph, opts) {
             }
             return null;
         },
+
 
         /**
         Traverse the graph using Dijkstra's algorithm,
@@ -259,7 +262,6 @@ var Graph = function Graph(opts) {
             vertices.push(vertex);
             return vertex;
         },
-
         addEdge: function addEdge(from, to, data) {
             var edge = {
                 from: from,
@@ -272,6 +274,7 @@ var Graph = function Graph(opts) {
             return edge;
         },
 
+
         /**
         Shortcut to add an edge and its reverse,
         sharing the same data.
@@ -279,7 +282,6 @@ var Graph = function Graph(opts) {
         addEdgePair: function addEdgePair(a, b, data) {
             return [this.addEdge(a, b, data), this.addEdge(b, a, data)];
         },
-
         removeEdge: function removeEdge(edge) {
             var index = edges.indexOf(edge);
             if (index !== -1) {
@@ -290,7 +292,6 @@ var Graph = function Graph(opts) {
                 edges.splice(index, 1);
             }
         },
-
         removeVertex: function removeVertex(vertex) {
             var index = vertices.indexOf(vertex);
             if (index !== -1) {
@@ -302,14 +303,13 @@ var Graph = function Graph(opts) {
                 vertices.splice(index, 1);
             }
         },
-
         outEdges: function outEdges(vertex, filter) {
             return this.incidentEdges(vertex, _const.OUT, filter);
         },
-
         inEdges: function inEdges(vertex, filter) {
             return this.incidentEdges(vertex, _const.IN, filter);
         },
+
 
         /**
         Returns all edges incident to a vertex, in one direction (outgoing or incoming),
@@ -322,7 +322,6 @@ var Graph = function Graph(opts) {
             var edges = direction ? vertex._out : vertex._in;
             return edges.filter(filter);
         },
-
         vertex: function vertex(props) {
             var v = null;
             for (var i = 0, l = vertices.length; i < l && v == null; i++) {
@@ -332,7 +331,6 @@ var Graph = function Graph(opts) {
             }
             return v;
         },
-
         edge: function edge(props) {
             var e = null;
             for (var i = 0, l = edges.length; i < l && e == null; i++) {
@@ -343,6 +341,7 @@ var Graph = function Graph(opts) {
             return e;
         },
 
+
         /**
         Perform an action on each vertex of the graph
         */
@@ -351,6 +350,7 @@ var Graph = function Graph(opts) {
                 action(vertices[i]);
             }
         },
+
 
         /**
         Perform an action on each edge of the graph
@@ -457,7 +457,6 @@ var PriorityQueue = function PriorityQueue(opts) {
         count: function count() {
             return heap.length;
         },
-
         insert: function insert(element, key) {
             if (typeof element === 'undefined') {
                 throw new Error('No element provided');
@@ -465,7 +464,6 @@ var PriorityQueue = function PriorityQueue(opts) {
             heap.push({ elt: element, key: key });
             bubbleUp(heap.length - 1);
         },
-
         pop: function pop() {
             if (heap.length === 0) {
                 throw new Error('Empty queue');
@@ -480,14 +478,12 @@ var PriorityQueue = function PriorityQueue(opts) {
             }
             return elt;
         },
-
         peek: function peek() {
             if (heap.length === 0) {
                 throw new Error('Empty queue');
             }
             return heap[0];
         },
-
         updateKey: function updateKey(element, newKey) {
             var idx = findElementIndex(element);
             if (idx === -1) {

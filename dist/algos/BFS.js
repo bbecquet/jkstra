@@ -38,6 +38,7 @@ function BFS(graph, opts) {
         Traverse the graph using the breadth first algorithm,
         starting from source, with the specified options
         */
+
         traverse: function traverse(source, opts) {
             var options = _extends({}, defaultTraversalOptions, opts);
 

@@ -75,7 +75,7 @@ function Dijkstra(graph, opts) {
         /**
         The most common use of Dijkstra traversal
         */
-        shortestPath: function(source, target, opts) {
+        shortestPath(source, target, opts) {
             function isTargetFound() {
                 return getFlags(target).state === SETTLED;
             }
@@ -94,7 +94,7 @@ function Dijkstra(graph, opts) {
         Traverse the graph using Dijkstra's algorithm,
         starting from source, with the specified options
         */
-        traverse: function(source, opts) {
+        traverse(source, opts) {
             const options = Object.assign({}, defaultTraversalOptions, opts);
 
             // reset node tagging

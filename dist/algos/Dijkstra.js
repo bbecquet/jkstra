@@ -88,6 +88,7 @@ function Dijkstra(graph, opts) {
         /**
         The most common use of Dijkstra traversal
         */
+
         shortestPath: function shortestPath(source, target, opts) {
             function isTargetFound() {
                 return getFlags(target).state === SETTLED;
@@ -102,6 +103,7 @@ function Dijkstra(graph, opts) {
             }
             return null;
         },
+
 
         /**
         Traverse the graph using Dijkstra's algorithm,

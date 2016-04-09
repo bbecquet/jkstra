@@ -89,7 +89,6 @@ var PriorityQueue = function PriorityQueue(opts) {
         count: function count() {
             return heap.length;
         },
-
         insert: function insert(element, key) {
             if (typeof element === 'undefined') {
                 throw new Error('No element provided');
@@ -97,7 +96,6 @@ var PriorityQueue = function PriorityQueue(opts) {
             heap.push({ elt: element, key: key });
             bubbleUp(heap.length - 1);
         },
-
         pop: function pop() {
             if (heap.length === 0) {
                 throw new Error('Empty queue');
@@ -112,14 +110,12 @@ var PriorityQueue = function PriorityQueue(opts) {
             }
             return elt;
         },
-
         peek: function peek() {
             if (heap.length === 0) {
                 throw new Error('Empty queue');
             }
             return heap[0];
         },
-
         updateKey: function updateKey(element, newKey) {
             var idx = findElementIndex(element);
             if (idx === -1) {

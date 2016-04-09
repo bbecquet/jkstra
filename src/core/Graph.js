@@ -6,7 +6,7 @@ const Graph = function(opts) {
     const edges = [];
 
     return {
-        addVertex: function(data) {
+        addVertex(data) {
             const vertex = {
                 _in: [],
                 _out: [],
@@ -16,7 +16,7 @@ const Graph = function(opts) {
             return vertex;
         },
 
-        addEdge: function(from, to, data) {
+        addEdge(from, to, data) {
             const edge = {
                 from: from,
                 to: to,
@@ -32,14 +32,14 @@ const Graph = function(opts) {
         Shortcut to add an edge and its reverse,
         sharing the same data.
         */
-        addEdgePair: function(a, b, data) {
+        addEdgePair(a, b, data) {
             return [
                 this.addEdge(a, b, data),
                 this.addEdge(b, a, data)
             ];
         },
 
-        removeEdge: function(edge) {
+        removeEdge(edge) {
             const index = edges.indexOf(edge);
             if(index !== -1) {
                 // remove from extremity vertices first
@@ -50,7 +50,7 @@ const Graph = function(opts) {
             }
         },
 
-        removeVertex: function(vertex) {
+        removeVertex(vertex) {
             const index = vertices.indexOf(vertex);
             if(index !== -1) {
                 // remove all incident edges first
@@ -62,11 +62,11 @@ const Graph = function(opts) {
             }
         },
 
-        outEdges: function(vertex, filter) {
+        outEdges(vertex, filter) {
             return this.incidentEdges(vertex, OUT, filter);
         },
 
-        inEdges: function(vertex, filter) {
+        inEdges(vertex, filter) {
             return this.incidentEdges(vertex, IN, filter);
         },
 
@@ -74,7 +74,7 @@ const Graph = function(opts) {
         Returns all edges incident to a vertex, in one direction (outgoing or incoming),
         optionnaly filtered by a given function.
         */
-        incidentEdges: function(vertex, direction, filter) {
+        incidentEdges(vertex, direction, filter) {
             if(!filter) {
                 return direction ? vertex._out : vertex._in;
             }
@@ -82,7 +82,7 @@ const Graph = function(opts) {
             return edges.filter(filter);
         },
 
-        vertex: function(props) {
+        vertex(props) {
             let v = null;
             for(let i = 0, l = vertices.length; i < l && v == null; i++) {
                 if(propsMatch(vertices[i].data, props)) {
@@ -92,7 +92,7 @@ const Graph = function(opts) {
             return v;
         },
 
-        edge: function(props) {
+        edge(props) {
             let e = null;
             for(let i = 0, l = edges.length; i < l && e == null; i++) {
                 if(propsMatch(edges[i].data, props)) {
@@ -105,7 +105,7 @@ const Graph = function(opts) {
         /**
         Perform an action on each vertex of the graph
         */
-        forEachVertex: function(action) {
+        forEachVertex(action) {
             for(let i = 0, l = vertices.length; i < l; i++) {
                 action(vertices[i]);
             }
@@ -114,7 +114,7 @@ const Graph = function(opts) {
         /**
         Perform an action on each edge of the graph
         */
-        forEachEdge: function(action) {
+        forEachEdge(action) {
             for(let i = 0, l = edges.length; i < l; i++) {
                 action(edges[i]);
             }
