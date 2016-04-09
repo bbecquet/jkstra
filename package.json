@@ -15,7 +15,7 @@
     "babel": "babel ./src/ --out-dir ./dist",
     "browserify": "browserify ./dist/jKstra.js -o ./build/jKstra.js",
     "build": "npm run babel && npm run browserify",
-    "test": "mocha --compilers js:babel-register tests/jKstra.js"
+    "test": "mocha --compilers js:babel-register tests"
   },
   "babel": {
     "presets": [
