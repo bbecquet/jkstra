@@ -71,16 +71,11 @@ const PriorityQueue = function(opts) {
         }
     }
 
-    // TODO: replace by native
     function findElementIndex(elt) {
-        let idx = -1;
         for(let i = 0, l = heap.length; i < l; i++) {
-            if(heap[i].elt === elt) {
-                idx = i;
-                break;
-            }
+            if(heap[i].elt === elt) { return i; }
         }
-        return idx;
+        return -1;
     }
 
     return {

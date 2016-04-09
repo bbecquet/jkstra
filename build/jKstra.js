@@ -444,16 +444,13 @@ var PriorityQueue = function PriorityQueue(opts) {
         }
     }
 
-    // TODO: replace by native
     function findElementIndex(elt) {
-        var idx = -1;
         for (var i = 0, l = heap.length; i < l; i++) {
             if (heap[i].elt === elt) {
-                idx = i;
-                break;
+                return i;
             }
         }
-        return idx;
+        return -1;
     }
 
     return {
