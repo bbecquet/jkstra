@@ -13,7 +13,7 @@
   "main": "dist/jKstra.js",
   "scripts": {
     "babel": "babel ./src/ --out-dir ./dist",
-    "browserify": "browserify ./dist/jKstra.js -o ./build/jKstra.js",
+    "browserify": "browserify ./dist/jKstra.js -o ./build/jKstra.js --standalone jKstra",
     "build": "npm run babel && npm run browserify",
     "test": "mocha --compilers js:babel-register tests"
   },
