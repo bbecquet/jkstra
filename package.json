@@ -1,6 +1,6 @@
 {
-  "name": "jKstra",
-  "version": "0.0.2",
+  "name": "jkstra",
+  "version": "0.0.3",
   "description": "Small JavaScript graph routing library",
   "author": "Benjamin Becquet",
   "repository": "bbecquet/jKstra",
