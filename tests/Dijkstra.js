@@ -33,7 +33,7 @@ describe('Dijkstra', function() {
     });
 
     describe('traverse()', function() {
-        it('visits the node from lower to higher cost from the source', function() {
+        it('visits the nodes from lower to higher cost from the source', function() {
             const traversalOrder = [];
             dijkstra.traverse(n[0], {
                 edgeCost: e => e.data,
