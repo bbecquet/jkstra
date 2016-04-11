@@ -7,6 +7,10 @@ jKstra - A simple graph and routing library
 
 For now it only supports simple directed graphs and provides a basic implementation of the Dijkstra's algorithm to find shortest paths in it.
 
+```bash
+npm install jkstra
+```
+
 Simple example
 -------
 
