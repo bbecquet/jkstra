@@ -28,7 +28,7 @@ n.push(graph.addVertex(3));
 n.push(graph.addVertex(4)); // the parameter is arbitrary data assigned to the node
 n.push(graph.addVertex({id: 666, label: 'A node holding complex data'}));
 
-console.log(n[3].data); // => 0
+console.log(n[3].data); // => 3
 console.log(n[5].data); // => {id: 666, label: 'A node holding complex data'}
 
 graph.addEdge(n[0], n[1], 7);   // The edges are directed. Here, only the edge from 0 to 1 is created.
