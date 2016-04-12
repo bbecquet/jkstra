@@ -12,6 +12,7 @@
   ],
   "main": "dist/jKstra.js",
   "scripts": {
+    "demo": "babel ./demo/src/ --out-dir ./demo",
     "babel": "babel ./src/ --out-dir ./dist",
     "browserify": "browserify ./dist/jKstra.js -o ./build/jKstra.js --standalone jKstra",
     "build": "npm run babel && npm run browserify",
