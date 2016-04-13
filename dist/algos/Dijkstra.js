@@ -79,6 +79,9 @@ function Dijkstra(graph, opts) {
         isFinished: function isFinished(direction) {
             return false;
         },
+        heuristic: function heuristic(v) {
+            return 0;
+        },
         onReach: null, // nothing special to do when reaching a node
         onSettle: null, // nothing special to do when setting a node
         edgeFilter: null // take all edges
@@ -113,6 +116,7 @@ function Dijkstra(graph, opts) {
             var options = _extends({}, defaultTraversalOptions, opts);
             var edgeFilter = options.edgeFilter;
             var edgeCost = options.edgeCost;
+            var heuristic = options.heuristic;
             var shouldUpdateKey = options.shouldUpdateKey;
             var onReach = options.onReach;
             var onSettle = options.onSettle;
@@ -144,7 +148,7 @@ function Dijkstra(graph, opts) {
                 for (var i = 0; i < edges.length; i++) {
                     e = edges[i];
                     v = e.to;
-                    eCost = totalCost + edgeCost(e, totalCost);
+                    eCost = totalCost + edgeCost(e, totalCost) + heuristic(v);
                     vFlags = getFlags(v);
 
                     if (vFlags.state !== SETTLED) {

@@ -60,6 +60,7 @@ function Dijkstra(graph, opts) {
         shouldUpdateKey: (prevCost, newCost) => { return newCost < prevCost; },
         edgeCost: (e, costDone) => 1,
         isFinished: direction => false,
+        heuristic: v => 0,
         onReach: null,        // nothing special to do when reaching a node
         onSettle: null,     // nothing special to do when setting a node
         edgeFilter: null    // take all edges
@@ -93,6 +94,7 @@ function Dijkstra(graph, opts) {
             const {
                 edgeFilter,
                 edgeCost,
+                heuristic,
                 shouldUpdateKey,
                 onReach,
                 onSettle,
@@ -122,7 +124,7 @@ function Dijkstra(graph, opts) {
                 for(let i = 0; i < edges.length; i++) {
                     e = edges[i];
                     v = e.to;
-                    eCost = totalCost + edgeCost(e, totalCost);
+                    eCost = totalCost + edgeCost(e, totalCost) + heuristic(v);
                     vFlags = getFlags(v);
 
                     if(vFlags.state !== SETTLED) {
