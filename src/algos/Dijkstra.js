@@ -32,7 +32,7 @@ function Dijkstra(graph, opts) {
     */
     function reach(v, incEdge, cost, action) {
         // update state to "reached", and register cost and incomingEdge
-        setFlags(v, {state: REACHED, cost: cost, inc: incEdge});
+        setFlags(v, {state: REACHED, cost, inc: incEdge});
         if(action) {
             action(v, incEdge, cost);
         }
@@ -57,15 +57,9 @@ function Dijkstra(graph, opts) {
     }
 
     const defaultTraversalOptions = {
-        shouldUpdateKey: function(prevCost, newCost) {
-            return newCost < prevCost;
-        },
-        edgeCost: function(e, costDone) {
-            return 1;
-        },
-        isFinished: function(direction) {
-            return false;
-        },
+        shouldUpdateKey: (prevCost, newCost) => { return newCost < prevCost; },
+        edgeCost: (e, costDone) => 1,
+        isFinished: direction => false,
         onReach: null,        // nothing special to do when reaching a node
         onSettle: null,     // nothing special to do when setting a node
         edgeFilter: null    // take all edges
@@ -96,6 +90,14 @@ function Dijkstra(graph, opts) {
         */
         traverse(source, opts) {
             const options = Object.assign({}, defaultTraversalOptions, opts);
+            const {
+                edgeFilter,
+                edgeCost,
+                shouldUpdateKey,
+                onReach,
+                onSettle,
+                isFinished
+            } = options;
 
             // reset node tagging
             clearFlags();
@@ -108,30 +110,30 @@ function Dijkstra(graph, opts) {
 
             const Q = new PriorityQueue();
             Q.insert(source, 0);
-            reach(source, null, 0, options.onReach);
+            reach(source, null, 0, onReach);
 
-            while(!options.isFinished() && Q.count() > 0) {
+            while(!isFinished() && Q.count() > 0) {
                 kv = Q.pop();
                 u = kv.elt;
                 totalCost = kv.key;
-                settle(u, options.onSettle);
+                settle(u, onSettle);
 
-                const edges = graph.outEdges(u, options.edgeFilter);
+                const edges = graph.outEdges(u, edgeFilter);
                 for(let i = 0; i < edges.length; i++) {
                     e = edges[i];
                     v = e.to;
-                    eCost = totalCost + options.edgeCost(e, totalCost);
+                    eCost = totalCost + edgeCost(e, totalCost);
                     vFlags = getFlags(v);
 
                     if(vFlags.state !== SETTLED) {
                         if(vFlags.state !== REACHED) {
                             Q.insert(v, eCost);
-                            reach(v, e, eCost, options.onReach);
+                            reach(v, e, eCost, onReach);
                         } else {
-                            if (options.shouldUpdateKey(vFlags.cost, eCost, vFlags.inc, e)) {
+                            if (shouldUpdateKey(vFlags.cost, eCost, vFlags.inc, e)) {
                             // else if (eCost < vFlags.cost) { // if already reached but new cost is less than current
                                 Q.updateKey(v, eCost);
-                                reach(v, e, eCost, options.onReach);
+                                reach(v, e, eCost, onReach);
                             }
                         }
                     }
@@ -139,7 +141,7 @@ function Dijkstra(graph, opts) {
             }
 
             // if false, means the whole graph was traversed
-            return options.isFinished();
+            return isFinished();
         }
     };
 };

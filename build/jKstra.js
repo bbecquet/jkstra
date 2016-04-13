@@ -185,8 +185,15 @@ function Dijkstra(graph, opts) {
         */
         traverse: function traverse(source, opts) {
             var options = _extends({}, defaultTraversalOptions, opts);
+            var edgeFilter = options.edgeFilter;
+            var edgeCost = options.edgeCost;
+            var shouldUpdateKey = options.shouldUpdateKey;
+            var onReach = options.onReach;
+            var onSettle = options.onSettle;
+            var isFinished = options.isFinished;
 
             // reset node tagging
+
             clearFlags();
 
             var kv = void 0;
@@ -199,30 +206,30 @@ function Dijkstra(graph, opts) {
 
             var Q = new _PriorityQueue2.default();
             Q.insert(source, 0);
-            reach(source, null, 0, options.onReach);
+            reach(source, null, 0, onReach);
 
-            while (!options.isFinished() && Q.count() > 0) {
+            while (!isFinished() && Q.count() > 0) {
                 kv = Q.pop();
                 u = kv.elt;
                 totalCost = kv.key;
-                settle(u, options.onSettle);
+                settle(u, onSettle);
 
-                var edges = graph.outEdges(u, options.edgeFilter);
+                var edges = graph.outEdges(u, edgeFilter);
                 for (var i = 0; i < edges.length; i++) {
                     e = edges[i];
                     v = e.to;
-                    eCost = totalCost + options.edgeCost(e, totalCost);
+                    eCost = totalCost + edgeCost(e, totalCost);
                     vFlags = getFlags(v);
 
                     if (vFlags.state !== SETTLED) {
                         if (vFlags.state !== REACHED) {
                             Q.insert(v, eCost);
-                            reach(v, e, eCost, options.onReach);
+                            reach(v, e, eCost, onReach);
                         } else {
-                            if (options.shouldUpdateKey(vFlags.cost, eCost, vFlags.inc, e)) {
+                            if (shouldUpdateKey(vFlags.cost, eCost, vFlags.inc, e)) {
                                 // else if (eCost < vFlags.cost) { // if already reached but new cost is less than current
                                 Q.updateKey(v, eCost);
-                                reach(v, e, eCost, options.onReach);
+                                reach(v, e, eCost, onReach);
                             }
                         }
                     }
@@ -230,7 +237,7 @@ function Dijkstra(graph, opts) {
             }
 
             // if false, means the whole graph was traversed
-            return options.isFinished();
+            return isFinished();
         }
     };
 };
@@ -286,7 +293,6 @@ var Graph = function Graph() {
             var index = edges.indexOf(edge);
             if (index !== -1) {
                 // remove from extremity vertices first
-                // TODO PERF: replace splice with a function operating in-place
                 edge.from._out.splice(edge.from._out.indexOf(edge), 1);
                 edge.to._in.splice(edge.to._in.indexOf(edge), 1);
                 edges.splice(index, 1);

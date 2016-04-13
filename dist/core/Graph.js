@@ -46,7 +46,6 @@ var Graph = function Graph() {
             var index = edges.indexOf(edge);
             if (index !== -1) {
                 // remove from extremity vertices first
-                // TODO PERF: replace splice with a function operating in-place
                 edge.from._out.splice(edge.from._out.indexOf(edge), 1);
                 edge.to._in.splice(edge.to._in.indexOf(edge), 1);
                 edges.splice(index, 1);
