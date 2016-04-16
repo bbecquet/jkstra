@@ -1,14 +1,24 @@
 /* global jKstra */
 
 function init() {
-    const gridW = 15;
-    const gridH = 15;
+    const gridW = 25;
+    const gridH = 25;
     const linearCost = 1;
     const diagonalCost = Math.sqrt(2);
 
     const graph = new jKstra.Graph();
+    let start = null;
+    let end = null;
 
-    function cellId(node) {
+    function cellIdToIJ(cellId) {
+        const parts = cellId.split('_');
+        return {
+            i: parseInt(parts[1], 10),
+            j: parseInt(parts[2], 10)
+        };
+    }
+
+    function nodeToCellId(node) {
         return `n_${node.data.i}_${node.data.j}`;
     }
 
@@ -28,7 +38,7 @@ function init() {
         for(let j = 0; j < gridW; j++) {
             if (j === 0) { tBodyContent += '<tr>'; }
             const node = createNode(i, j);
-            tBodyContent += `<td id="${cellId(node)}" />`;
+            tBodyContent += `<td id="${nodeToCellId(node)}" />`;
             if (j === gridW - 1) { tBodyContent += '</tr>'; }
         }
     }
@@ -36,22 +46,97 @@ function init() {
 
     // add some obstacles in the grid by removing some nodes
     function removeNode(n) {
-        document.getElementById(cellId(n)).className = 'off';
+        document.getElementById(nodeToCellId(n)).className = 'off';
         graph.removeVertex(n);
     }
     for(let i = 0; i < 13; i++) { removeNode(graph.vertex({i, j: 5})); }
-    for(let i = 5; i < 14; i++) { removeNode(graph.vertex({i, j: 10})); }
+    for(let i = 5; i < 20; i++) { removeNode(graph.vertex({i, j: 10})); }
+    for(let j = 0; j < 15; j++) { removeNode(graph.vertex({i: 20, j})); }
+    for(let i = 1; i < 10; i++) { removeNode(graph.vertex({i, j: 18})); }
+    for(let j = 18; j < 25; j++) { removeNode(graph.vertex({i: 10, j})); }
 
-    const dijkstra = new jKstra.algos.Dijkstra(graph);
-    const path = dijkstra.shortestPath(graph.vertex({i: 0, j: 0}), graph.vertex({i: 8, j: 14}), {
-        edgeCost: function(e) { return e.data; },
-        onSettle: function(n) {
-            // mark nodes added to the tree
-            document.getElementById(cellId(n)).className = 'onTree';
+    function clearPath() {
+        let elements = document.getElementsByClassName('onPath');
+        for (let i = elements.length - 1; i >= 0; --i) {
+            elements.item(i).classList.remove('onPath');
+        }
+        elements = document.getElementsByClassName('onTree');
+        for (let i = elements.length - 1; i >= 0; --i) {
+            elements.item(i).classList.remove('onTree');
+        }
+        document.getElementById('pathCost').innerHTML = '';
+    }
+
+    function getTotalCost(path) {
+        if (!path) return -1;
+        return path.map(e => e.data).reduce((prev, curr) => prev + curr, 0);
+    }
+
+    function distance(from, to) {
+        const iDiff = from.data.i - to.data.i;
+        const jDiff = from.data.j - to.data.j;
+        return Math.sqrt(iDiff * iDiff + jDiff * jDiff);
+    }
+
+    function computePath(from, to, useHeuristic) {
+        const dijkstra = new jKstra.algos.Dijkstra(graph);
+        const path = dijkstra.shortestPath(from, to, {
+            edgeCost: e => e.data,
+            onSettle: n => {
+                // mark nodes added to the tree
+                document.getElementById(nodeToCellId(n)).classList.add('onTree');
+            },
+            heuristic: useHeuristic ?
+                n => distance(n, to) :
+                n => 0
+        });
+        // mark nodes on the shortestPath
+        path.map(e => e.from)
+            .concat(to)
+            .forEach(node => { document.getElementById(nodeToCellId(node)).classList.add('onPath'); });
+
+        document.getElementById('pathCost').innerHTML = getTotalCost(path);
+    }
+
+    document.getElementById('grid').addEventListener('click', e => {
+        const cell = e.target;
+        if (cell && cell.matches('td')) {
+            if (cell.matches('.off')) {
+                return;
+            }
+            if (start) {
+                document.getElementById(nodeToCellId(start)).classList.remove('start');
+                clearPath();
+            }
+            cell.classList.add('start');
+            start = graph.vertex(cellIdToIJ(cell.id));
         }
     });
-    // mark nodes on the shortestPath
-    path.forEach(function(e) { document.getElementById(cellId(e.from)).className = 'onPath'; });
+
+    document.getElementById('grid').addEventListener('contextmenu', e => {
+        e.preventDefault();
+        const cell = e.target;
+        if (cell && cell.matches('td')) {
+            if (cell.matches('.off')) {
+                return;
+            }
+            if (end) {
+                document.getElementById(nodeToCellId(end)).classList.remove('end');
+                clearPath();
+            }
+            cell.classList.add('end');
+            end = graph.vertex(cellIdToIJ(cell.id));
+        }
+        return false;
+    });
+
+    document.getElementById('computePath').addEventListener('click', () => {
+        clearPath();
+        if (!start || !end) {
+            return;
+        }
+        computePath(start, end, document.getElementById('useHeuristic').checked);
+    });
 }
 
 window.onload = init;

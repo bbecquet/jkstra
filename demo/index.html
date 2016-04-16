@@ -12,14 +12,43 @@
             border: 1px solid silver;
             position: relative;
         }
-        .visited { background-color: blue; }
-        .onTree { background-color: green; }
+        .onTree { background-color: #faa; }
         .onPath { background-color: red; }
         .off { background-color: black; }
+        .start:before {
+            content: '';
+            display: block;
+            width: 18px;
+            height: 18px;
+            transform: translate(-50%, -50%);
+            border: 2px solid blue;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+        }
+        .end:after {
+            content: '';
+            display: block;
+            width: 15px;
+            height: 15px;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background-color: blue;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+        }
     </style>
 </head>
 
 <body>
     <table><tbody id="grid"></tbody></table>
+    <div>
+        <div>
+            <label>Use A* (with distance heuristic)<input type="checkbox" id="useHeuristic" /></label>
+        </div>
+        <button id="computePath">Compute shortest path</button>
+        <p>Path cost: <span id="pathCost"></span></p>
+    </div>
 </body>
 </html>
