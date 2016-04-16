@@ -174,3 +174,4 @@ function Dijkstra(graph, opts) {
 
 exports.default = Dijkstra;
 module.exports = exports['default'];
+//# sourceMappingURL=Dijkstra.js.map

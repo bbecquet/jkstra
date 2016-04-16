@@ -71,6 +71,7 @@ function BFS(graph, opts) {
 
 exports.default = BFS;
 module.exports = exports['default'];
+
 },{"../core/constants.js":5}],2:[function(require,module,exports){
 'use strict';
 
@@ -248,6 +249,7 @@ function Dijkstra(graph, opts) {
 
 exports.default = Dijkstra;
 module.exports = exports['default'];
+
 },{"../core/PriorityQueue.js":4}],3:[function(require,module,exports){
 'use strict';
 
@@ -373,6 +375,7 @@ var Graph = function Graph() {
 
 exports.default = Graph;
 module.exports = exports['default'];
+
 },{"./constants.js":5,"./utils.js":6}],4:[function(require,module,exports){
 'use strict';
 
@@ -511,6 +514,7 @@ var PriorityQueue = function PriorityQueue(opts) {
 
 exports.default = PriorityQueue;
 module.exports = exports['default'];
+
 },{}],5:[function(require,module,exports){
 "use strict";
 
@@ -519,6 +523,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 var OUT = exports.OUT = true;
 var IN = exports.IN = false;
+
 },{}],6:[function(require,module,exports){
 "use strict";
 
@@ -555,6 +560,7 @@ function propsMatch(set, subSet) {
     }
     return true;
 };
+
 },{}],7:[function(require,module,exports){
 'use strict';
 
@@ -586,5 +592,6 @@ var jKstra = {
 
 exports.default = jKstra;
 module.exports = exports['default'];
+
 },{"./algos/BFS.js":1,"./algos/Dijkstra.js":2,"./core/Graph.js":3}]},{},[7])(7)
 });

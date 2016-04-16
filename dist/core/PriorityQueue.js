@@ -135,3 +135,4 @@ var PriorityQueue = function PriorityQueue(opts) {
 
 exports.default = PriorityQueue;
 module.exports = exports['default'];
+//# sourceMappingURL=PriorityQueue.js.map

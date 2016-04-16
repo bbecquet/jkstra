@@ -70,3 +70,4 @@ function BFS(graph, opts) {
 
 exports.default = BFS;
 module.exports = exports['default'];
+//# sourceMappingURL=BFS.js.map
