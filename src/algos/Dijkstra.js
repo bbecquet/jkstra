@@ -17,10 +17,10 @@ function Dijkstra(graph, opts) {
     }
 
     function setFlags(v, flags) {
-        if(!v.hasOwnProperty(flagKey)) {
+        if (!v.hasOwnProperty(flagKey)) {
             v[flagKey] = {};
         }
-        for(let key in flags) {
+        for (let key in flags) {
             v[flagKey][key] = flags[key];
         }
     }
@@ -33,14 +33,14 @@ function Dijkstra(graph, opts) {
     function reach(v, incEdge, cost, action) {
         // update state to "reached", and register cost and incomingEdge
         setFlags(v, {state: REACHED, cost, inc: incEdge});
-        if(action) {
+        if (action) {
             action(v, incEdge, cost);
         }
     }
 
     function settle(v, action) {
         setFlags(v, {state: SETTLED});
-        if(action) {
+        if (action) {
             action(v);
         }
     }
@@ -49,7 +49,7 @@ function Dijkstra(graph, opts) {
         const edges = [];
         let edge;
         // going upward in the tree until the first vertex (with no incoming edge)
-        while((edge = getFlags(end).inc) != null) {
+        while ((edge = getFlags(end).inc) !== null) {
             edges.push(edge);
             end = edge.from;
         }
@@ -113,20 +113,20 @@ function Dijkstra(graph, opts) {
             Q.insert(source, 0);
             reach(source, null, 0, onReach);
 
-            while(!isFinished() && Q.count > 0) {
+            while (!isFinished() && Q.count > 0) {
                 kv = Q.pop();
                 u = kv.elt;
                 totalCost = kv.key;
                 settle(u, onSettle);
 
                 const edges = graph.outEdges(u, edgeFilter);
-                for(let e of edges) {
+                for (let e of edges) {
                     v = e.to;
                     eCost = totalCost + edgeCost(e, totalCost) + heuristic(v);
                     vFlags = getFlags(v);
 
-                    if(vFlags.state !== SETTLED) {
-                        if(vFlags.state !== REACHED) {
+                    if (vFlags.state !== SETTLED) {
+                        if (vFlags.state !== REACHED) {
                             Q.insert(v, eCost);
                             reach(v, e, eCost, onReach);
                         } else {
