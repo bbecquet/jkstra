@@ -580,9 +580,13 @@ var _Graph = require('./core/Graph.js');
 
 var _Graph2 = _interopRequireDefault(_Graph);
 
+var _constants = require('./core/constants.js');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var jKstra = {
+    IN: _constants.IN,
+    OUT: _constants.OUT,
     Graph: _Graph2.default,
     algos: {
         BFS: _BFS2.default,
@@ -593,5 +597,5 @@ var jKstra = {
 exports.default = jKstra;
 module.exports = exports['default'];
 
-},{"./algos/BFS.js":1,"./algos/Dijkstra.js":2,"./core/Graph.js":3}]},{},[7])(7)
+},{"./algos/BFS.js":1,"./algos/Dijkstra.js":2,"./core/Graph.js":3,"./core/constants.js":5}]},{},[7])(7)
 });
