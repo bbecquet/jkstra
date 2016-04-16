@@ -1,7 +1,4 @@
 /node_modules/
-/perfs/
-.install.stamp
 *~
 *.sh
-*.sublime-*
 *.log
