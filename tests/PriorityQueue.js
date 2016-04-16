@@ -29,17 +29,17 @@ describe('PriorityQueue', function() {
         });
     });
 
-    describe('count()', function() {
+    describe('count', function() {
         it('returns 0 on a new PriorityQueue', function() {
-            assert.equal(pq.count(), 0);
+            assert.equal(pq.count, 0);
         });
 
         it('is incremented after insertions', function() {
             pq.insert('a', 1);
-            assert.equal(pq.count(), 1);
+            assert.equal(pq.count, 1);
             pq.insert('b', 3);
             pq.insert('c', 2);
-            assert.equal(pq.count(), 3);
+            assert.equal(pq.count, 3);
         });
 
         it('is decremented after deletions', function() {
@@ -48,9 +48,9 @@ describe('PriorityQueue', function() {
             pq.insert('c', 3);
             pq.pop();
             pq.pop();
-            assert.equal(pq.count(), 1);
+            assert.equal(pq.count, 1);
             pq.pop();
-            assert.equal(pq.count(), 0);
+            assert.equal(pq.count, 0);
         });
     });
 

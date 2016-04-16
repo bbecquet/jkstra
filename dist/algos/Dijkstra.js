@@ -138,7 +138,7 @@ function Dijkstra(graph, opts) {
             Q.insert(source, 0);
             reach(source, null, 0, onReach);
 
-            while (!isFinished() && Q.count() > 0) {
+            while (!isFinished() && Q.count > 0) {
                 kv = Q.pop();
                 u = kv.elt;
                 totalCost = kv.key;

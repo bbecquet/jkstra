@@ -1,41 +1,43 @@
 
 /**
-Binary heap implementation of a priority queue
+Binary this.heap implementation of a priority queue
 with an updateKey method.
 */
-const PriorityQueue = function(opts) {
-    const heap = [];
+class PriorityQueue {
+    constructor() {
+        this.heap = [];
+    }
 
     // TODO: make it an option, for max or min priority queue
-    function compare(a, b) {
+    _compare(a, b) {
         return a.key - b.key;
     }
 
-    function bubbleUp(idx) {
-        let element = heap[idx];
+    _bubbleUp(idx) {
+        let element = this.heap[idx];
         let parentIdx;
         let parent;
         while (idx > 0) {
             // Compute the parent element's index, and fetch it.
             parentIdx = Math.floor((idx + 1) / 2) - 1;
-            parent = heap[parentIdx];
+            parent = this.heap[parentIdx];
             // If the parent has a lesser score, things are in order and we
             // are done.
-            if (compare(element, parent) > 0) {
+            if (this._compare(element, parent) > 0) {
                 break;
             }
 
             // Otherwise, swap the parent with the current element and
             // continue.
-            heap[parentIdx] = element;
-            heap[idx] = parent;
+            this.heap[parentIdx] = element;
+            this.heap[idx] = parent;
             idx = parentIdx;
         }
     }
 
-    function sinkDown(idx) {
-        let length = heap.length;
-        let element = heap[idx];
+    _sinkDown(idx) {
+        let length = this.heap.length;
+        let element = this.heap[idx];
         let swapIdx;
 
         while(true) {
@@ -45,16 +47,16 @@ const PriorityQueue = function(opts) {
 
             // if the first child exists
             if (lChildIdx < length) {
-                let lChild = heap[lChildIdx];
+                let lChild = this.heap[lChildIdx];
                 // and is lower than the element, they must be swapped
-                if (compare(lChild, element) < 0) {
+                if (this._compare(lChild, element) < 0) {
                     swapIdx = lChildIdx;
                 }
 
                 // unless there is another lesser child, which will be the one swapped
                 if (rChildIdx < length) {
-                    const rChild = heap[rChildIdx];
-                    if ((swapIdx === -1 || compare(rChild, lChild) < 0) && compare(rChild, element) < 0) {
+                    const rChild = this.heap[rChildIdx];
+                    if ((swapIdx === -1 || this._compare(rChild, lChild) < 0) && this._compare(rChild, element) < 0) {
                         swapIdx = rChildIdx;
                     }
                 }
@@ -66,68 +68,66 @@ const PriorityQueue = function(opts) {
             }
 
             // otherwise, swap and continue on next tree level
-            heap[idx] = heap[swapIdx];
-            heap[swapIdx] = element;
+            this.heap[idx] = this.heap[swapIdx];
+            this.heap[swapIdx] = element;
             idx = swapIdx;
         }
     }
 
-    function findElementIndex(elt) {
-        for(let i = 0, l = heap.length; i < l; i++) {
-            if(heap[i].elt === elt) { return i; }
+    _findElementIndex(elt) {
+        for (let i = 0, l = this.heap.length; i < l; i++) {
+            if (this.heap[i].elt === elt) { return i; }
         }
         return -1;
     }
 
-    return {
-        count() {
-            return heap.length;
-        },
+    get count() {
+        return this.heap.length;
+    }
 
-        insert(element, key) {
-            if (typeof element === 'undefined') {
-                throw new Error('No element provided');
-            }
-            heap.push({elt: element, key: key});
-            bubbleUp(heap.length - 1);
-        },
-
-        pop() {
-            if(heap.length === 0) {
-                throw new Error('Empty queue');
-            }
-            const elt = heap[0];
-            const end = heap.pop();
-            // replace the first element by the last,
-            // and let it sink to its right place
-            if (heap.length > 0) {
-                heap[0] = end;
-                sinkDown(0);
-            }
-            return elt;
-        },
-
-        peek() {
-            if(heap.length === 0) {
-                throw new Error('Empty queue');
-            }
-            return heap[0];
-        },
-
-        updateKey(element, newKey) {
-            const idx = findElementIndex(element);
-            if(idx === -1) {
-                throw new Error('The element is not in the heap');
-            }
-            const oldKey = heap[idx].key;
-            heap[idx].key = newKey;
-            if(newKey < oldKey) {
-                bubbleUp(idx);
-            } else {
-                sinkDown(idx);
-            }
+    insert(element, key) {
+        if (typeof element === 'undefined') {
+            throw new Error('No element provided');
         }
-    };
+        this.heap.push({elt: element, key: key});
+        this._bubbleUp(this.heap.length - 1);
+    }
+
+    pop() {
+        if (this.heap.length === 0) {
+            throw new Error('Empty queue');
+        }
+        const elt = this.heap[0];
+        const end = this.heap.pop();
+        // replace the first element by the last,
+        // and let it sink to its right place
+        if (this.heap.length > 0) {
+            this.heap[0] = end;
+            this._sinkDown(0);
+        }
+        return elt;
+    }
+
+    peek() {
+        if (this.heap.length === 0) {
+            throw new Error('Empty queue');
+        }
+        return this.heap[0];
+    }
+
+    updateKey(element, newKey) {
+        const idx = this._findElementIndex(element);
+        if (idx === -1) {
+            throw new Error('The element is not in the this.heap');
+        }
+        const oldKey = this.heap[idx].key;
+        this.heap[idx].key = newKey;
+        if (newKey < oldKey) {
+            this._bubbleUp(idx);
+        } else {
+            this._sinkDown(idx);
+        }
+    }
 };
 
 export default PriorityQueue;
