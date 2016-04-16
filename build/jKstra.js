@@ -81,114 +81,116 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _PriorityQueue = require('../core/PriorityQueue.js');
 
 var _PriorityQueue2 = _interopRequireDefault(_PriorityQueue);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 var SETTLED = 2;
 var REACHED = 1;
 
-function Dijkstra(graph, opts) {
-    var options = _extends({ flagKey: '_dijkstra' }, opts);
-    var flagKey = options.flagKey;
+var Dijkstra = function () {
+    function Dijkstra(graph, opts) {
+        _classCallCheck(this, Dijkstra);
 
-    function clearFlags() {
-        graph.forEachVertex(function (v) {
-            delete v[flagKey];
-        });
+        this.graph = graph;
+        var options = _extends({ flagKey: '_dijkstra' }, opts);
+        this.flagKey = options.flagKey;
     }
 
-    function getFlags(v) {
-        return v[flagKey] || {};
-    }
+    // TODO: move these 3 functions to some utils
 
-    function setFlags(v, flags) {
-        if (!v.hasOwnProperty(flagKey)) {
-            v[flagKey] = {};
+
+    _createClass(Dijkstra, [{
+        key: '_clearFlags',
+        value: function _clearFlags() {
+            var _this = this;
+
+            this.graph.forEachVertex(function (v) {
+                delete v[_this.flagKey];
+            });
         }
-        for (var key in flags) {
-            v[flagKey][key] = flags[key];
+    }, {
+        key: '_getFlags',
+        value: function _getFlags(v) {
+            return v[this.flagKey] || {};
         }
-    }
-
-    /**
-    @param v {Vertex}
-    @param incEge {Edge} the incoming edge
-    @param cost {the cost }
-    */
-    function reach(v, incEdge, cost, action) {
-        // update state to "reached", and register cost and incomingEdge
-        setFlags(v, { state: REACHED, cost: cost, inc: incEdge });
-        if (action) {
-            action(v, incEdge, cost);
+    }, {
+        key: '_setFlags',
+        value: function _setFlags(v, flags) {
+            if (!v.hasOwnProperty(this.flagKey)) {
+                v[this.flagKey] = {};
+            }
+            for (var key in flags) {
+                v[this.flagKey][key] = flags[key];
+            }
         }
-    }
-
-    function settle(v, action) {
-        setFlags(v, { state: SETTLED });
-        if (action) {
-            action(v);
+    }, {
+        key: '_reach',
+        value: function _reach(v, incEdge, cost, action) {
+            // update state to "reached", and register cost and incomingEdge
+            this._setFlags(v, { state: REACHED, cost: cost, inc: incEdge });
+            if (action) {
+                action(v, incEdge, cost);
+            }
         }
-    }
-
-    function rebuildPath(end) {
-        var edges = [];
-        var edge = void 0;
-        // going upward in the tree until the first vertex (with no incoming edge)
-        while ((edge = getFlags(end).inc) != null) {
-            edges.push(edge);
-            end = edge.from;
+    }, {
+        key: '_settle',
+        value: function _settle(v, action) {
+            this._setFlags(v, { state: SETTLED });
+            if (action) {
+                action(v);
+            }
         }
-        return edges.reverse();
-    }
+    }, {
+        key: 'rebuildPath',
+        value: function rebuildPath(end) {
+            var edges = [];
+            var edge = void 0;
+            // going upward in the tree until the first vertex (with no incoming edge)
+            while ((edge = this._getFlags(end).inc) !== null) {
+                edges.push(edge);
+                end = edge.from;
+            }
+            return edges.reverse();
+        }
+    }, {
+        key: 'shortestPath',
+        // take all edges
 
-    var defaultTraversalOptions = {
-        shouldUpdateKey: function shouldUpdateKey(prevCost, newCost) {
-            return newCost < prevCost;
-        },
-        edgeCost: function edgeCost(e, costDone) {
-            return 1;
-        },
-        isFinished: function isFinished(direction) {
-            return false;
-        },
-        heuristic: function heuristic(v) {
-            return 0;
-        },
-        onReach: null, // nothing special to do when reaching a node
-        onSettle: null, // nothing special to do when setting a node
-        edgeFilter: null // take all edges
-    };
 
-    return {
         /**
         The most common use of Dijkstra traversal
         */
-
-        shortestPath: function shortestPath(source, target, opts) {
+        value: function shortestPath(source, target, opts) {
             function isTargetFound() {
-                return getFlags(target).state === SETTLED;
+                return this._getFlags(target).state === SETTLED;
             }
 
             var options = opts || {};
-            options.isFinished = isTargetFound;
+            options.isFinished = isTargetFound.bind(this);
 
             var found = this.traverse(source, options);
             if (found) {
-                return rebuildPath(target);
+                return this.rebuildPath(target);
             }
             return null;
-        },
-
+        }
 
         /**
         Traverse the graph using Dijkstra's algorithm,
         starting from source, with the specified options
         */
-        traverse: function traverse(source, opts) {
-            var options = _extends({}, defaultTraversalOptions, opts);
+
+    }, {
+        key: 'traverse',
+        value: function traverse(source, opts) {
+            var options = _extends({}, Dijkstra.defaultTraversalOptions, opts);
             var edgeFilter = options.edgeFilter;
             var edgeCost = options.edgeCost;
             var heuristic = options.heuristic;
@@ -199,7 +201,7 @@ function Dijkstra(graph, opts) {
 
             // reset node tagging
 
-            clearFlags();
+            this._clearFlags();
 
             var kv = void 0;
             var u = void 0,
@@ -210,15 +212,15 @@ function Dijkstra(graph, opts) {
 
             var Q = new _PriorityQueue2.default();
             Q.insert(source, 0);
-            reach(source, null, 0, onReach);
+            this._reach(source, null, 0, onReach);
 
             while (!isFinished() && Q.count > 0) {
                 kv = Q.pop();
                 u = kv.elt;
                 totalCost = kv.key;
-                settle(u, onSettle);
+                this._settle(u, onSettle);
 
-                var edges = graph.outEdges(u, edgeFilter);
+                var edges = this.graph.outEdges(u, edgeFilter);
                 var _iteratorNormalCompletion = true;
                 var _didIteratorError = false;
                 var _iteratorError = undefined;
@@ -229,17 +231,17 @@ function Dijkstra(graph, opts) {
 
                         v = e.to;
                         eCost = totalCost + edgeCost(e, totalCost) + heuristic(v);
-                        vFlags = getFlags(v);
+                        vFlags = this._getFlags(v);
 
                         if (vFlags.state !== SETTLED) {
                             if (vFlags.state !== REACHED) {
                                 Q.insert(v, eCost);
-                                reach(v, e, eCost, onReach);
+                                this._reach(v, e, eCost, onReach);
                             } else {
                                 if (shouldUpdateKey(vFlags.cost, eCost, vFlags.inc, e)) {
                                     // else if (eCost < vFlags.cost) { // if already reached but new cost is less than current
                                     Q.updateKey(v, eCost);
-                                    reach(v, e, eCost, onReach);
+                                    this._reach(v, e, eCost, onReach);
                                 }
                             }
                         }
@@ -263,8 +265,28 @@ function Dijkstra(graph, opts) {
             // if false, means the whole graph was traversed
             return isFinished();
         }
-    };
-};
+    }]);
+
+    return Dijkstra;
+}();
+
+Dijkstra.defaultTraversalOptions = {
+    shouldUpdateKey: function shouldUpdateKey(prevCost, newCost) {
+        return newCost < prevCost;
+    },
+    edgeCost: function edgeCost(e, costDone) {
+        return 1;
+    },
+    isFinished: function isFinished(direction) {
+        return false;
+    },
+    heuristic: function heuristic(v) {
+        return 0;
+    },
+    onReach: null, // nothing special to do when reaching a node
+    onSettle: null, // nothing special to do when setting a node
+    edgeFilter: null };
+;
 
 exports.default = Dijkstra;
 module.exports = exports['default'];
