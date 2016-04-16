@@ -7,7 +7,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _const = require('../core/const.js');
+var _constants = require('../core/constants.js');
 
 function BFS(graph, opts) {
     var options = _extends({ flagKey: '_bfs' }, opts);
@@ -28,7 +28,7 @@ function BFS(graph, opts) {
     }
 
     var defaultTraversalOptions = {
-        direction: _const.OUT,
+        direction: _constants.OUT,
         onVisit: function onVisit(u) {},
         onTestEdge: function onTestEdge(e) {},
         edgeFilter: null // take all edges
@@ -71,7 +71,7 @@ function BFS(graph, opts) {
 
 exports.default = BFS;
 module.exports = exports['default'];
-},{"../core/const.js":5}],2:[function(require,module,exports){
+},{"../core/constants.js":5}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -255,7 +255,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _const = require('./const.js');
+var _constants = require('./constants.js');
 
 var _utils = require('./utils.js');
 
@@ -314,10 +314,10 @@ var Graph = function Graph() {
             }
         },
         outEdges: function outEdges(vertex, filter) {
-            return this.incidentEdges(vertex, _const.OUT, filter);
+            return this.incidentEdges(vertex, _constants.OUT, filter);
         },
         inEdges: function inEdges(vertex, filter) {
-            return this.incidentEdges(vertex, _const.IN, filter);
+            return this.incidentEdges(vertex, _constants.IN, filter);
         },
 
 
@@ -373,7 +373,7 @@ var Graph = function Graph() {
 
 exports.default = Graph;
 module.exports = exports['default'];
-},{"./const.js":5,"./utils.js":6}],4:[function(require,module,exports){
+},{"./constants.js":5,"./utils.js":6}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 
 import { assert } from 'chai';
-import { OUT } from '../dist/core/const.js';
+import { OUT } from '../dist/core/constants.js';
 import Graph from '../dist/core/Graph.js';
 
 describe('Graph', function() {

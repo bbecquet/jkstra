@@ -3,7 +3,7 @@
 import { assert } from 'chai';
 import Graph from '../dist/core/Graph.js';
 import Dijkstra from '../dist/algos/BFS.js';
-import { IN } from '../dist/core/const.js';
+import { IN } from '../dist/core/constants.js';
 
 describe('BFS', function() {
     let n, e, dijkstra;

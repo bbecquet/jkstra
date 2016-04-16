@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _const = require('./const.js');
+var _constants = require('./constants.js');
 
 var _utils = require('./utils.js');
 
@@ -63,10 +63,10 @@ var Graph = function Graph() {
             }
         },
         outEdges: function outEdges(vertex, filter) {
-            return this.incidentEdges(vertex, _const.OUT, filter);
+            return this.incidentEdges(vertex, _constants.OUT, filter);
         },
         inEdges: function inEdges(vertex, filter) {
-            return this.incidentEdges(vertex, _const.IN, filter);
+            return this.incidentEdges(vertex, _constants.IN, filter);
         },
 
 

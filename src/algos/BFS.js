@@ -1,4 +1,4 @@
-import { OUT } from '../core/const.js';
+import { OUT } from '../core/constants.js';
 
 function BFS(graph, opts) {
     const options = Object.assign({ flagKey: '_bfs' }, opts);

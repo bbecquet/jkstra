@@ -1,4 +1,4 @@
-import { IN, OUT } from './const.js';
+import { IN, OUT } from './constants.js';
 import { propsMatch } from './utils.js';
 
 const Graph = function() {
