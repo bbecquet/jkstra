@@ -14,15 +14,14 @@ function isScalar(o) {
 };
 
 function propsMatch(set, subSet) {
-    if (subSet == null) {
-        return set == null;
+    if (subSet === null) {
+        return set === null;
     }
 
     if (isScalar(set)) {
         return isScalar(subSet) && set === subSet;
     }
 
-    var match = true;
     for (var p in subSet) {
         if (set.hasOwnProperty(p)) {
             if (!propsMatch(set[p], subSet[p])) {
@@ -32,5 +31,5 @@ function propsMatch(set, subSet) {
             return false;
         }
     }
-    return match;
+    return true;
 };

@@ -82,23 +82,21 @@ const Graph = function() {
         },
 
         vertex(props) {
-            let v = null;
-            for(let i = 0, l = vertices.length; i < l && v == null; i++) {
+            for(let i = 0, l = vertices.length; i < l; i++) {
                 if(propsMatch(vertices[i].data, props)) {
-                    v = vertices[i];
+                    return vertices[i];
                 }
             }
-            return v;
+            return null;
         },
 
         edge(props) {
-            let e = null;
-            for(let i = 0, l = edges.length; i < l && e == null; i++) {
+            for(let i = 0, l = edges.length; i < l; i++) {
                 if(propsMatch(edges[i].data, props)) {
-                    e = edges[i];
+                    return edges[i];
                 }
             }
-            return e;
+            return null;
         },
 
         /**

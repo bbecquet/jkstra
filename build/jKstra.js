@@ -333,22 +333,20 @@ var Graph = function Graph() {
             return edges.filter(filter);
         },
         vertex: function vertex(props) {
-            var v = null;
-            for (var i = 0, l = vertices.length; i < l && v == null; i++) {
+            for (var i = 0, l = vertices.length; i < l; i++) {
                 if ((0, _utils.propsMatch)(vertices[i].data, props)) {
-                    v = vertices[i];
+                    return vertices[i];
                 }
             }
-            return v;
+            return null;
         },
         edge: function edge(props) {
-            var e = null;
-            for (var i = 0, l = edges.length; i < l && e == null; i++) {
+            for (var i = 0, l = edges.length; i < l; i++) {
                 if ((0, _utils.propsMatch)(edges[i].data, props)) {
-                    e = edges[i];
+                    return edges[i];
                 }
             }
-            return e;
+            return null;
         },
 
 
@@ -538,15 +536,14 @@ function isScalar(o) {
 };
 
 function propsMatch(set, subSet) {
-    if (subSet == null) {
-        return set == null;
+    if (subSet === null) {
+        return set === null;
     }
 
     if (isScalar(set)) {
         return isScalar(subSet) && set === subSet;
     }
 
-    var match = true;
     for (var p in subSet) {
         if (set.hasOwnProperty(p)) {
             if (!propsMatch(set[p], subSet[p])) {
@@ -556,7 +553,7 @@ function propsMatch(set, subSet) {
             return false;
         }
     }
-    return match;
+    return true;
 };
 },{}],7:[function(require,module,exports){
 'use strict';
