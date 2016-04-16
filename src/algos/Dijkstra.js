@@ -106,7 +106,6 @@ function Dijkstra(graph, opts) {
 
             let kv;
             let u, v;
-            let e;
             let totalCost, eCost;
             let vFlags;
 
@@ -121,8 +120,7 @@ function Dijkstra(graph, opts) {
                 settle(u, onSettle);
 
                 const edges = graph.outEdges(u, edgeFilter);
-                for(let i = 0; i < edges.length; i++) {
-                    e = edges[i];
+                for(let e of edges) {
                     v = e.to;
                     eCost = totalCost + edgeCost(e, totalCost) + heuristic(v);
                     vFlags = getFlags(v);

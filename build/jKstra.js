@@ -204,7 +204,6 @@ function Dijkstra(graph, opts) {
             var kv = void 0;
             var u = void 0,
                 v = void 0;
-            var e = void 0;
             var totalCost = void 0,
                 eCost = void 0;
             var vFlags = void 0;
@@ -220,22 +219,42 @@ function Dijkstra(graph, opts) {
                 settle(u, onSettle);
 
                 var edges = graph.outEdges(u, edgeFilter);
-                for (var i = 0; i < edges.length; i++) {
-                    e = edges[i];
-                    v = e.to;
-                    eCost = totalCost + edgeCost(e, totalCost) + heuristic(v);
-                    vFlags = getFlags(v);
+                var _iteratorNormalCompletion = true;
+                var _didIteratorError = false;
+                var _iteratorError = undefined;
 
-                    if (vFlags.state !== SETTLED) {
-                        if (vFlags.state !== REACHED) {
-                            Q.insert(v, eCost);
-                            reach(v, e, eCost, onReach);
-                        } else {
-                            if (shouldUpdateKey(vFlags.cost, eCost, vFlags.inc, e)) {
-                                // else if (eCost < vFlags.cost) { // if already reached but new cost is less than current
-                                Q.updateKey(v, eCost);
+                try {
+                    for (var _iterator = edges[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                        var e = _step.value;
+
+                        v = e.to;
+                        eCost = totalCost + edgeCost(e, totalCost) + heuristic(v);
+                        vFlags = getFlags(v);
+
+                        if (vFlags.state !== SETTLED) {
+                            if (vFlags.state !== REACHED) {
+                                Q.insert(v, eCost);
                                 reach(v, e, eCost, onReach);
+                            } else {
+                                if (shouldUpdateKey(vFlags.cost, eCost, vFlags.inc, e)) {
+                                    // else if (eCost < vFlags.cost) { // if already reached but new cost is less than current
+                                    Q.updateKey(v, eCost);
+                                    reach(v, e, eCost, onReach);
+                                }
                             }
+                        }
+                    }
+                } catch (err) {
+                    _didIteratorError = true;
+                    _iteratorError = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion && _iterator.return) {
+                            _iterator.return();
+                        }
+                    } finally {
+                        if (_didIteratorError) {
+                            throw _iteratorError;
                         }
                     }
                 }
