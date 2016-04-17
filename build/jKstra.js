@@ -72,7 +72,7 @@ function BFS(graph, opts) {
 exports.default = BFS;
 module.exports = exports['default'];
 
-},{"../core/constants.js":6}],2:[function(require,module,exports){
+},{"../core/constants.js":7}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -291,7 +291,7 @@ Dijkstra.defaultTraversalOptions = {
 exports.default = Dijkstra;
 module.exports = exports['default'];
 
-},{"../core/PriorityQueue.js":5}],3:[function(require,module,exports){
+},{"../core/PriorityQueue.js":6}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -305,6 +305,10 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _PriorityQueue = require('../core/PriorityQueue.js');
 
 var _PriorityQueue2 = _interopRequireDefault(_PriorityQueue);
+
+var _nodeFlagger = require('./nodeFlagger.js');
+
+var _nodeFlagger2 = _interopRequireDefault(_nodeFlagger);
 
 var _constants = require('../core/constants.js');
 
@@ -324,44 +328,17 @@ var DijkstraIterator = function () {
         this.graph = graph;
         this.source = source;
         this.options = _extends({}, DijkstraIterator.defaultOptions, opts);
-        this.flagKey = this.options.flagKey;
+        this.flags = new _nodeFlagger2.default(this.graph, this.options.flagKey);
 
         this.pQ = new _PriorityQueue2.default();
         this._initTraversal();
     }
 
-    // TODO: move these 3 functions to some utils
-
-
     _createClass(DijkstraIterator, [{
-        key: '_clearFlags',
-        value: function _clearFlags() {
-            var _this = this;
-
-            this.graph.forEachVertex(function (v) {
-                delete v[_this.flagKey];
-            });
-        }
-    }, {
-        key: '_getFlags',
-        value: function _getFlags(v) {
-            return v[this.flagKey] || {};
-        }
-    }, {
-        key: '_setFlags',
-        value: function _setFlags(v, flags) {
-            if (!v.hasOwnProperty(this.flagKey)) {
-                v[this.flagKey] = {};
-            }
-            for (var key in flags) {
-                v[this.flagKey][key] = flags[key];
-            }
-        }
-    }, {
         key: '_reach',
         value: function _reach(v, incEdge, cost, action) {
             // update state to "reached", and register cost and incomingEdge
-            this._setFlags(v, { state: REACHED, cost: cost, inc: incEdge });
+            this.flags.setFlags(v, { state: REACHED, cost: cost, inc: incEdge });
             if (action) {
                 action(v, incEdge, cost);
             }
@@ -369,7 +346,7 @@ var DijkstraIterator = function () {
     }, {
         key: '_settle',
         value: function _settle(v, action) {
-            this._setFlags(v, { state: SETTLED });
+            this.flags.setFlags(v, { state: SETTLED });
             if (action) {
                 action(v);
             }
@@ -378,7 +355,7 @@ var DijkstraIterator = function () {
         key: '_initTraversal',
         value: function _initTraversal() {
             // reset node tagging
-            this._clearFlags();
+            this.flags.clearFlags(this.graph);
             this.pQ.insert(this.source, 0);
             this._reach(this.source, null, 0, this.options.onReach);
         }
@@ -420,7 +397,7 @@ var DijkstraIterator = function () {
 
                     v = direction === _constants.OUT ? e.to : e.from;
                     eCost = totalCost + edgeCost(e, totalCost) + heuristic(v);
-                    vFlags = this._getFlags(v);
+                    vFlags = this.flags.getFlags(v);
 
                     if (vFlags.state !== SETTLED) {
                         if (vFlags.state !== REACHED) {
@@ -476,7 +453,58 @@ DijkstraIterator.defaultOptions = {
 exports.default = DijkstraIterator;
 module.exports = exports['default'];
 
-},{"../core/PriorityQueue.js":5,"../core/constants.js":6}],4:[function(require,module,exports){
+},{"../core/PriorityQueue.js":6,"../core/constants.js":7,"./nodeFlagger.js":4}],4:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var _class = function () {
+    function _class(graph, flagKey) {
+        _classCallCheck(this, _class);
+
+        this.graph = graph;
+        this.flagKey = flagKey;
+    }
+
+    _createClass(_class, [{
+        key: "clearFlags",
+        value: function clearFlags(graph) {
+            var _this = this;
+
+            this.graph.forEachVertex(function (v) {
+                delete v[_this.flagKey];
+            });
+        }
+    }, {
+        key: "getFlags",
+        value: function getFlags(v) {
+            return v[this.flagKey] || {};
+        }
+    }, {
+        key: "setFlags",
+        value: function setFlags(v, flags) {
+            if (!v.hasOwnProperty(this.flagKey)) {
+                v[this.flagKey] = {};
+            }
+            for (var key in flags) {
+                v[this.flagKey][key] = flags[key];
+            }
+        }
+    }]);
+
+    return _class;
+}();
+
+exports.default = _class;
+module.exports = exports['default'];
+
+},{}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -602,7 +630,7 @@ var Graph = function Graph() {
 exports.default = Graph;
 module.exports = exports['default'];
 
-},{"./constants.js":6,"./utils.js":7}],5:[function(require,module,exports){
+},{"./constants.js":7,"./utils.js":8}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -769,7 +797,7 @@ var PriorityQueue = function () {
 exports.default = PriorityQueue;
 module.exports = exports['default'];
 
-},{}],6:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -778,7 +806,7 @@ Object.defineProperty(exports, "__esModule", {
 var OUT = exports.OUT = true;
 var IN = exports.IN = false;
 
-},{}],7:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -815,7 +843,7 @@ function propsMatch(set, subSet) {
     return true;
 };
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -856,5 +884,5 @@ var jKstra = {
 exports.default = jKstra;
 module.exports = exports['default'];
 
-},{"./algos/BFS.js":1,"./algos/Dijkstra.js":2,"./algos/DijkstraIterator.js":3,"./core/Graph.js":4,"./core/constants.js":6}]},{},[8])(8)
+},{"./algos/BFS.js":1,"./algos/Dijkstra.js":2,"./algos/DijkstraIterator.js":3,"./core/Graph.js":5,"./core/constants.js":7}]},{},[9])(9)
 });

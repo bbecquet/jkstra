@@ -12,6 +12,10 @@ var _PriorityQueue = require('../core/PriorityQueue.js');
 
 var _PriorityQueue2 = _interopRequireDefault(_PriorityQueue);
 
+var _nodeFlagger = require('./nodeFlagger.js');
+
+var _nodeFlagger2 = _interopRequireDefault(_nodeFlagger);
+
 var _constants = require('../core/constants.js');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -30,44 +34,17 @@ var DijkstraIterator = function () {
         this.graph = graph;
         this.source = source;
         this.options = _extends({}, DijkstraIterator.defaultOptions, opts);
-        this.flagKey = this.options.flagKey;
+        this.flags = new _nodeFlagger2.default(this.graph, this.options.flagKey);
 
         this.pQ = new _PriorityQueue2.default();
         this._initTraversal();
     }
 
-    // TODO: move these 3 functions to some utils
-
-
     _createClass(DijkstraIterator, [{
-        key: '_clearFlags',
-        value: function _clearFlags() {
-            var _this = this;
-
-            this.graph.forEachVertex(function (v) {
-                delete v[_this.flagKey];
-            });
-        }
-    }, {
-        key: '_getFlags',
-        value: function _getFlags(v) {
-            return v[this.flagKey] || {};
-        }
-    }, {
-        key: '_setFlags',
-        value: function _setFlags(v, flags) {
-            if (!v.hasOwnProperty(this.flagKey)) {
-                v[this.flagKey] = {};
-            }
-            for (var key in flags) {
-                v[this.flagKey][key] = flags[key];
-            }
-        }
-    }, {
         key: '_reach',
         value: function _reach(v, incEdge, cost, action) {
             // update state to "reached", and register cost and incomingEdge
-            this._setFlags(v, { state: REACHED, cost: cost, inc: incEdge });
+            this.flags.setFlags(v, { state: REACHED, cost: cost, inc: incEdge });
             if (action) {
                 action(v, incEdge, cost);
             }
@@ -75,7 +52,7 @@ var DijkstraIterator = function () {
     }, {
         key: '_settle',
         value: function _settle(v, action) {
-            this._setFlags(v, { state: SETTLED });
+            this.flags.setFlags(v, { state: SETTLED });
             if (action) {
                 action(v);
             }
@@ -84,7 +61,7 @@ var DijkstraIterator = function () {
         key: '_initTraversal',
         value: function _initTraversal() {
             // reset node tagging
-            this._clearFlags();
+            this.flags.clearFlags(this.graph);
             this.pQ.insert(this.source, 0);
             this._reach(this.source, null, 0, this.options.onReach);
         }
@@ -126,7 +103,7 @@ var DijkstraIterator = function () {
 
                     v = direction === _constants.OUT ? e.to : e.from;
                     eCost = totalCost + edgeCost(e, totalCost) + heuristic(v);
-                    vFlags = this._getFlags(v);
+                    vFlags = this.flags.getFlags(v);
 
                     if (vFlags.state !== SETTLED) {
                         if (vFlags.state !== REACHED) {
