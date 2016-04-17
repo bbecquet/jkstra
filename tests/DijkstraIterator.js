@@ -3,6 +3,7 @@
 import { assert } from 'chai';
 import Graph from '../dist/core/Graph.js';
 import DijkstraIterator from '../dist/algos/DijkstraIterator.js';
+import { IN } from '../dist/core/constants.js';
 
 describe('DijkstraIterator', function() {
     let graph, n, e;
@@ -42,6 +43,20 @@ describe('DijkstraIterator', function() {
                 traversalOrder.push(iteratorResult.value.data);
             }
             assert.equal(traversalOrder.join(), '0,1,2,5,4,3');
+        });
+
+        it('works in reverse', function() {
+            const dijkstraIterator = new DijkstraIterator(graph, n[4], {
+                edgeCost: e => e.data,
+                direction: IN
+            });
+
+            const traversalOrder = [];
+            let iteratorResult;
+            while(!(iteratorResult = dijkstraIterator.next()).done) {
+                traversalOrder.push(iteratorResult.value.data);
+            }
+            assert.equal(traversalOrder.join(), '4,3,5,2,0,1');
         });
     });
 });

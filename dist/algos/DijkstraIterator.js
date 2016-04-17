@@ -12,6 +12,8 @@ var _PriorityQueue = require('../core/PriorityQueue.js');
 
 var _PriorityQueue2 = _interopRequireDefault(_PriorityQueue);
 
+var _constants = require('../core/constants.js');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -96,6 +98,7 @@ var DijkstraIterator = function () {
             }
 
             var _options = this.options;
+            var direction = _options.direction;
             var onReach = _options.onReach;
             var onSettle = _options.onSettle;
             var edgeFilter = _options.edgeFilter;
@@ -112,7 +115,7 @@ var DijkstraIterator = function () {
             var eCost = void 0;
 
             this._settle(u, onSettle);
-            var edges = this.graph.outEdges(u, edgeFilter);
+            var edges = this.graph.incidentEdges(u, direction, edgeFilter);
             var _iteratorNormalCompletion = true;
             var _didIteratorError = false;
             var _iteratorError = undefined;
@@ -121,7 +124,7 @@ var DijkstraIterator = function () {
                 for (var _iterator = edges[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                     var e = _step.value;
 
-                    v = e.to;
+                    v = direction === _constants.OUT ? e.to : e.from;
                     eCost = totalCost + edgeCost(e, totalCost) + heuristic(v);
                     vFlags = this._getFlags(v);
 
@@ -161,6 +164,7 @@ var DijkstraIterator = function () {
 
 DijkstraIterator.defaultOptions = {
     flagKey: '_dijkstra',
+    direction: _constants.OUT,
     shouldUpdateKey: function shouldUpdateKey(prevCost, newCost) {
         return newCost < prevCost;
     },

@@ -1,10 +1,12 @@
 import PriorityQueue from '../core/PriorityQueue.js';
+import { OUT } from '../core/constants.js';
 const SETTLED = 2;
 const REACHED = 1;
 
 class DijkstraIterator {
     static defaultOptions = {
         flagKey: '_dijkstra',
+        direction: OUT,
         shouldUpdateKey: (prevCost, newCost) => { return newCost < prevCost; },
         edgeCost: (e, costDone) => 1,
         heuristic: v => 0,
@@ -73,6 +75,7 @@ class DijkstraIterator {
         }
 
         const {
+            direction,
             onReach,
             onSettle,
             edgeFilter,
@@ -89,9 +92,9 @@ class DijkstraIterator {
         let eCost;
 
         this._settle(u, onSettle);
-        const edges = this.graph.outEdges(u, edgeFilter);
+        const edges = this.graph.incidentEdges(u, direction, edgeFilter);
         for (let e of edges) {
-            v = e.to;
+            v = direction === OUT ? e.to : e.from;
             eCost = totalCost + edgeCost(e, totalCost) + heuristic(v);
             vFlags = this._getFlags(v);
 
