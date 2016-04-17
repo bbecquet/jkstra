@@ -8,6 +8,10 @@ var _BFS = require('./algos/BFS.js');
 
 var _BFS2 = _interopRequireDefault(_BFS);
 
+var _DijkstraIterator = require('./algos/DijkstraIterator.js');
+
+var _DijkstraIterator2 = _interopRequireDefault(_DijkstraIterator);
+
 var _Dijkstra = require('./algos/Dijkstra.js');
 
 var _Dijkstra2 = _interopRequireDefault(_Dijkstra);
@@ -26,7 +30,8 @@ var jKstra = {
     Graph: _Graph2.default,
     algos: {
         BFS: _BFS2.default,
-        Dijkstra: _Dijkstra2.default
+        Dijkstra: _Dijkstra2.default,
+        DijkstraIterator: _DijkstraIterator2.default
     }
 };
 
