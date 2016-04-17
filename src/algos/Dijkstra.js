@@ -1,54 +1,19 @@
-import PriorityQueue from '../core/PriorityQueue.js';
+import DijkstraIterator from '../algos/DijkstraIterator.js';
+import NodeFlagger from './nodeFlagger.js';
 const SETTLED = 2;
-const REACHED = 1;
 
 class Dijkstra {
     constructor(graph, opts) {
         this.graph = graph;
-        const options = Object.assign({ flagKey: '_dijkstra' }, opts);
-        this.flagKey = options.flagKey;
-    }
-
-    // TODO: move these 3 functions to some utils
-    _clearFlags() {
-        this.graph.forEachVertex(v => {
-            delete v[this.flagKey];
-        });
-    }
-
-    _getFlags(v) {
-        return v[this.flagKey] || {};
-    }
-
-    _setFlags(v, flags) {
-        if (!v.hasOwnProperty(this.flagKey)) {
-            v[this.flagKey] = {};
-        }
-        for (let key in flags) {
-            v[this.flagKey][key] = flags[key];
-        }
-    }
-
-    _reach(v, incEdge, cost, action) {
-        // update state to "reached", and register cost and incomingEdge
-        this._setFlags(v, {state: REACHED, cost, inc: incEdge});
-        if (action) {
-            action(v, incEdge, cost);
-        }
-    }
-
-    _settle(v, action) {
-        this._setFlags(v, {state: SETTLED});
-        if (action) {
-            action(v);
-        }
+        this.options = Object.assign({ flagKey: '_dijkstra' }, opts);
+        this.nodeFlagger = new NodeFlagger(this.graph, this.options.flagKey);
     }
 
     rebuildPath(end) {
         const edges = [];
         let edge;
         // going upward in the tree until the first vertex (with no incoming edge)
-        while ((edge = this._getFlags(end).inc) !== null) {
+        while ((edge = this.nodeFlagger.getFlags(end).inc) !== null) {
             edges.push(edge);
             end = edge.from;
         }
@@ -56,25 +21,15 @@ class Dijkstra {
     }
 
     static defaultTraversalOptions = {
-        shouldUpdateKey: (prevCost, newCost) => { return newCost < prevCost; },
-        edgeCost: (e, costDone) => 1,
-        isFinished: direction => false,
-        heuristic: v => 0,
-        onReach: null,        // nothing special to do when reaching a node
-        onSettle: null,     // nothing special to do when setting a node
-        edgeFilter: null    // take all edges
+        isFinished: () => false
     }
 
     /**
     The most common use of Dijkstra traversal
     */
     shortestPath(source, target, opts) {
-        function isTargetFound() {
-            return this._getFlags(target).state === SETTLED;
-        }
-
         const options = opts || {};
-        options.isFinished = isTargetFound.bind(this);
+        options.isFinished = () => this.nodeFlagger.getFlags(target).state === SETTLED;
 
         const found = this.traverse(source, options);
         if(found) {
@@ -89,57 +44,13 @@ class Dijkstra {
     */
     traverse(source, opts) {
         const options = Object.assign({}, Dijkstra.defaultTraversalOptions, opts);
-        const {
-            edgeFilter,
-            edgeCost,
-            heuristic,
-            shouldUpdateKey,
-            onReach,
-            onSettle,
-            isFinished
-        } = options;
+        const dijkstraIterator = new DijkstraIterator(this.graph, source, opts);
 
-        // reset node tagging
-        this._clearFlags();
-
-        let kv;
-        let u, v;
-        let totalCost, eCost;
-        let vFlags;
-
-        const Q = new PriorityQueue();
-        Q.insert(source, 0);
-        this._reach(source, null, 0, onReach);
-
-        while (!isFinished() && Q.count > 0) {
-            kv = Q.pop();
-            u = kv.elt;
-            totalCost = kv.key;
-            this._settle(u, onSettle);
-
-            const edges = this.graph.outEdges(u, edgeFilter);
-            for (let e of edges) {
-                v = e.to;
-                eCost = totalCost + edgeCost(e, totalCost) + heuristic(v);
-                vFlags = this._getFlags(v);
-
-                if (vFlags.state !== SETTLED) {
-                    if (vFlags.state !== REACHED) {
-                        Q.insert(v, eCost);
-                        this._reach(v, e, eCost, onReach);
-                    } else {
-                        if (shouldUpdateKey(vFlags.cost, eCost, vFlags.inc, e)) {
-                        // else if (eCost < vFlags.cost) { // if already reached but new cost is less than current
-                            Q.updateKey(v, eCost);
-                            this._reach(v, e, eCost, onReach);
-                        }
-                    }
-                }
-            }
-        }
+        // simply loop over the iterator until it ends
+        while(!dijkstraIterator.next().done && !options.isFinished()) { }
 
         // if false, means the whole graph was traversed
-        return isFinished();
+        return options.isFinished();
     }
 };
 
