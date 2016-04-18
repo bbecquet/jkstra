@@ -16,6 +16,10 @@ var _Dijkstra = require('./algos/Dijkstra.js');
 
 var _Dijkstra2 = _interopRequireDefault(_Dijkstra);
 
+var _BidirectionalDijkstra = require('./algos/BidirectionalDijkstra.js');
+
+var _BidirectionalDijkstra2 = _interopRequireDefault(_BidirectionalDijkstra);
+
 var _Graph = require('./core/Graph.js');
 
 var _Graph2 = _interopRequireDefault(_Graph);
@@ -31,6 +35,7 @@ var jKstra = {
     algos: {
         BFS: _BFS2.default,
         Dijkstra: _Dijkstra2.default,
+        BidirectionalDijkstra: _BidirectionalDijkstra2.default,
         DijkstraIterator: _DijkstraIterator2.default
     }
 };

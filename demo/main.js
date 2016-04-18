@@ -106,8 +106,8 @@ function init() {
         return Math.sqrt(iDiff * iDiff + jDiff * jDiff);
     }
 
-    function computePath(from, to, useHeuristic) {
-        var dijkstra = new jKstra.algos.Dijkstra(graph);
+    function computePath(from, to, bidirectional, useHeuristic) {
+        var dijkstra = bidirectional ? new jKstra.algos.BidirectionalDijkstra(graph) : new jKstra.algos.Dijkstra(graph);
         var path = dijkstra.shortestPath(from, to, {
             edgeCost: function edgeCost(e) {
                 return e.data;
@@ -161,7 +161,6 @@ function init() {
             cell.classList.add('end');
             end = graph.vertex(cellIdToIJ(cell.id));
         }
-        return false;
     });
 
     document.getElementById('computePath').addEventListener('click', function () {
@@ -169,7 +168,7 @@ function init() {
         if (!start || !end) {
             return;
         }
-        computePath(start, end, document.getElementById('useHeuristic').checked);
+        computePath(start, end, document.getElementById('bidirectional').checked, document.getElementById('useHeuristic').checked);
     });
 }
 
