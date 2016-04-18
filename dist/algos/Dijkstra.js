@@ -16,11 +16,11 @@ var _nodeFlagger = require('./nodeFlagger.js');
 
 var _nodeFlagger2 = _interopRequireDefault(_nodeFlagger);
 
+var _constants = require('../core/constants.js');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var SETTLED = 2;
 
 var Dijkstra = function () {
     function Dijkstra(graph, opts) {
@@ -55,7 +55,7 @@ var Dijkstra = function () {
 
             var options = opts || {};
             options.isFinished = function () {
-                return _this.nodeFlagger.getFlags(target).state === SETTLED;
+                return _this.nodeFlagger.getFlags(target).state === _constants.SETTLED;
             };
 
             var found = this.traverse(source, options);

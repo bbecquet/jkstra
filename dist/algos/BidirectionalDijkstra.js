@@ -22,9 +22,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var REACHED = 1;
-var SETTLED = 2;
-
 var BidirectionalDijkstra = function () {
     function BidirectionalDijkstra(graph, opts) {
         _classCallCheck(this, BidirectionalDijkstra);
@@ -61,7 +58,7 @@ var BidirectionalDijkstra = function () {
             var outState = this.outFlagger.getFlags(node);
             var inState = this.inFlagger.getFlags(node);
 
-            return (outState.state === REACHED || outState.state === SETTLED) && (inState.state === REACHED || inState.state === SETTLED);
+            return (outState.state === _constants.REACHED || outState.state === _constants.SETTLED) && (inState.state === _constants.REACHED || inState.state === _constants.SETTLED);
         }
 
         /**

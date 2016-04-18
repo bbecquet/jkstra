@@ -97,9 +97,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var REACHED = 1;
-var SETTLED = 2;
-
 var BidirectionalDijkstra = function () {
     function BidirectionalDijkstra(graph, opts) {
         _classCallCheck(this, BidirectionalDijkstra);
@@ -136,7 +133,7 @@ var BidirectionalDijkstra = function () {
             var outState = this.outFlagger.getFlags(node);
             var inState = this.inFlagger.getFlags(node);
 
-            return (outState.state === REACHED || outState.state === SETTLED) && (inState.state === REACHED || inState.state === SETTLED);
+            return (outState.state === _constants.REACHED || outState.state === _constants.SETTLED) && (inState.state === _constants.REACHED || inState.state === _constants.SETTLED);
         }
 
         /**
@@ -205,11 +202,11 @@ var _nodeFlagger = require('./nodeFlagger.js');
 
 var _nodeFlagger2 = _interopRequireDefault(_nodeFlagger);
 
+var _constants = require('../core/constants.js');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var SETTLED = 2;
 
 var Dijkstra = function () {
     function Dijkstra(graph, opts) {
@@ -244,7 +241,7 @@ var Dijkstra = function () {
 
             var options = opts || {};
             options.isFinished = function () {
-                return _this.nodeFlagger.getFlags(target).state === SETTLED;
+                return _this.nodeFlagger.getFlags(target).state === _constants.SETTLED;
             };
 
             var found = this.traverse(source, options);
@@ -286,7 +283,7 @@ Dijkstra.defaultTraversalOptions = {
 exports.default = Dijkstra;
 module.exports = exports['default'];
 
-},{"../algos/DijkstraIterator.js":4,"./nodeFlagger.js":5}],4:[function(require,module,exports){
+},{"../algos/DijkstraIterator.js":4,"../core/constants.js":8,"./nodeFlagger.js":5}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -311,9 +308,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var SETTLED = 2;
-var REACHED = 1;
-
 var DijkstraIterator = function () {
     // take all edges
 
@@ -333,7 +327,7 @@ var DijkstraIterator = function () {
         key: '_reach',
         value: function _reach(v, incEdge, cost, action) {
             // update state to "reached", and register cost and incomingEdge
-            this.flags.setFlags(v, { state: REACHED, cost: cost, inc: incEdge });
+            this.flags.setFlags(v, { state: _constants.REACHED, cost: cost, inc: incEdge });
             if (action) {
                 action(v, incEdge, cost);
             }
@@ -341,7 +335,7 @@ var DijkstraIterator = function () {
     }, {
         key: '_settle',
         value: function _settle(v, action) {
-            this.flags.setFlags(v, { state: SETTLED });
+            this.flags.setFlags(v, { state: _constants.SETTLED });
             if (action) {
                 action(v);
             }
@@ -394,8 +388,8 @@ var DijkstraIterator = function () {
                     eCost = totalCost + edgeCost(e, totalCost) + heuristic(v);
                     vFlags = this.flags.getFlags(v);
 
-                    if (vFlags.state !== SETTLED) {
-                        if (vFlags.state !== REACHED) {
+                    if (vFlags.state !== _constants.SETTLED) {
+                        if (vFlags.state !== _constants.REACHED) {
                             this.pQ.insert(v, eCost);
                             this._reach(v, e, eCost, onReach);
                         } else {
@@ -800,6 +794,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 var OUT = exports.OUT = true;
 var IN = exports.IN = false;
+var REACHED = exports.REACHED = 1;
+var SETTLED = exports.SETTLED = 2;
 
 },{}],9:[function(require,module,exports){
 "use strict";

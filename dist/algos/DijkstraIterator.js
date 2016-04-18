@@ -22,9 +22,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var SETTLED = 2;
-var REACHED = 1;
-
 var DijkstraIterator = function () {
     // take all edges
 
@@ -44,7 +41,7 @@ var DijkstraIterator = function () {
         key: '_reach',
         value: function _reach(v, incEdge, cost, action) {
             // update state to "reached", and register cost and incomingEdge
-            this.flags.setFlags(v, { state: REACHED, cost: cost, inc: incEdge });
+            this.flags.setFlags(v, { state: _constants.REACHED, cost: cost, inc: incEdge });
             if (action) {
                 action(v, incEdge, cost);
             }
@@ -52,7 +49,7 @@ var DijkstraIterator = function () {
     }, {
         key: '_settle',
         value: function _settle(v, action) {
-            this.flags.setFlags(v, { state: SETTLED });
+            this.flags.setFlags(v, { state: _constants.SETTLED });
             if (action) {
                 action(v);
             }
@@ -105,8 +102,8 @@ var DijkstraIterator = function () {
                     eCost = totalCost + edgeCost(e, totalCost) + heuristic(v);
                     vFlags = this.flags.getFlags(v);
 
-                    if (vFlags.state !== SETTLED) {
-                        if (vFlags.state !== REACHED) {
+                    if (vFlags.state !== _constants.SETTLED) {
+                        if (vFlags.state !== _constants.REACHED) {
                             this.pQ.insert(v, eCost);
                             this._reach(v, e, eCost, onReach);
                         } else {

@@ -1,6 +1,6 @@
 import DijkstraIterator from '../algos/DijkstraIterator.js';
 import NodeFlagger from './nodeFlagger.js';
-const SETTLED = 2;
+import { SETTLED } from '../core/constants.js';
 
 class Dijkstra {
     constructor(graph, opts) {

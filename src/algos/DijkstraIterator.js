@@ -1,8 +1,6 @@
 import PriorityQueue from '../core/PriorityQueue.js';
 import NodeFlagger from './nodeFlagger.js';
-import { OUT } from '../core/constants.js';
-const SETTLED = 2;
-const REACHED = 1;
+import { OUT, SETTLED, REACHED } from '../core/constants.js';
 
 class DijkstraIterator {
     static defaultOptions = {

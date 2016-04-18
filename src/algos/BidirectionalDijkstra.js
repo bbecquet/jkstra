@@ -1,8 +1,6 @@
 import DijkstraIterator from '../algos/DijkstraIterator.js';
 import NodeFlagger from './nodeFlagger.js';
-import { IN, OUT } from '../core/constants.js';
-const REACHED = 1;
-const SETTLED = 2;
+import { IN, OUT, REACHED, SETTLED } from '../core/constants.js';
 
 class BidirectionalDijkstra {
     constructor(graph, opts) {

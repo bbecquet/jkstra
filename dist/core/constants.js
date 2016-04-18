@@ -5,4 +5,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 var OUT = exports.OUT = true;
 var IN = exports.IN = false;
+var REACHED = exports.REACHED = 1;
+var SETTLED = exports.SETTLED = 2;
 //# sourceMappingURL=constants.js.map
