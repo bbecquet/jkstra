@@ -24,11 +24,11 @@ class DijkstraIterator {
         this._initTraversal();
     }
 
-    _reach(v, incEdge, cost, action) {
+    _reach(v, incEdge, fCost, gCost, action) {
         // update state to "reached", and register cost and incomingEdge
-        this.flags.setFlags(v, {state: REACHED, cost, inc: incEdge});
+        this.flags.setFlags(v, {state: REACHED, fCost, gCost, inc: incEdge});
         if (action) {
-            action(v, incEdge, cost);
+            action(v);
         }
     }
 
@@ -43,7 +43,7 @@ class DijkstraIterator {
         // reset node tagging
         this.flags.clearFlags(this.graph);
         this.pQ.insert(this.source, this.options.heuristic(this.source));
-        this._reach(this.source, null, this.options.heuristic(this.source), this.options.onReach);
+        this._reach(this.source, null, this.options.heuristic(this.source), 0, this.options.onReach);
     }
 
     next() {
@@ -67,24 +67,25 @@ class DijkstraIterator {
         const u = kv.elt;
         let v;
         let vFlags;
-        const totalCost = kv.key;
-        let eCost;
+        const uGCost = this.flags.getFlags(u).gCost;
+        let vFCost, vGCost;
 
         this._settle(u, onSettle);
         const edges = this.graph.incidentEdges(u, direction, edgeFilter);
         for (let e of edges) {
             v = direction === OUT ? e.to : e.from;
-            eCost = totalCost + edgeCost(e, totalCost) + heuristic(v);
             vFlags = this.flags.getFlags(v);
 
             if (vFlags.state !== SETTLED) {
+                vGCost = uGCost + edgeCost(e, uGCost);
+                vFCost = vGCost + heuristic(v);
                 if (vFlags.state !== REACHED) {
-                    this.pQ.insert(v, eCost);
-                    this._reach(v, e, eCost, onReach);
+                    this.pQ.insert(v, vFCost);
+                    this._reach(v, e, vFCost, vGCost, onReach);
                 } else {
-                    if (shouldUpdateKey(vFlags.cost, eCost, vFlags.inc, e)) {
-                        this.pQ.updateKey(v, eCost);
-                        this._reach(v, e, eCost, onReach);
+                    if (shouldUpdateKey(vFlags.fCost, vFCost, vFlags.inc, e)) {
+                        this.pQ.updateKey(v, vFCost);
+                        this._reach(v, e, vFCost, vGCost, onReach);
                     }
                 }
             }

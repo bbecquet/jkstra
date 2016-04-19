@@ -319,11 +319,11 @@ var DijkstraIterator = function () {
 
     _createClass(DijkstraIterator, [{
         key: '_reach',
-        value: function _reach(v, incEdge, cost, action) {
+        value: function _reach(v, incEdge, fCost, gCost, action) {
             // update state to "reached", and register cost and incomingEdge
-            this.flags.setFlags(v, { state: _constants.REACHED, cost: cost, inc: incEdge });
+            this.flags.setFlags(v, { state: _constants.REACHED, fCost: fCost, gCost: gCost, inc: incEdge });
             if (action) {
-                action(v, incEdge, cost);
+                action(v);
             }
         }
     }, {
@@ -340,7 +340,7 @@ var DijkstraIterator = function () {
             // reset node tagging
             this.flags.clearFlags(this.graph);
             this.pQ.insert(this.source, this.options.heuristic(this.source));
-            this._reach(this.source, null, this.options.heuristic(this.source), this.options.onReach);
+            this._reach(this.source, null, this.options.heuristic(this.source), 0, this.options.onReach);
         }
     }, {
         key: 'next',
@@ -365,8 +365,9 @@ var DijkstraIterator = function () {
             var u = kv.elt;
             var v = void 0;
             var vFlags = void 0;
-            var totalCost = kv.key;
-            var eCost = void 0;
+            var uGCost = this.flags.getFlags(u).gCost;
+            var vFCost = void 0,
+                vGCost = void 0;
 
             this._settle(u, onSettle);
             var edges = this.graph.incidentEdges(u, direction, edgeFilter);
@@ -379,17 +380,18 @@ var DijkstraIterator = function () {
                     var e = _step.value;
 
                     v = direction === _constants.OUT ? e.to : e.from;
-                    eCost = totalCost + edgeCost(e, totalCost) + heuristic(v);
                     vFlags = this.flags.getFlags(v);
 
                     if (vFlags.state !== _constants.SETTLED) {
+                        vGCost = uGCost + edgeCost(e, uGCost);
+                        vFCost = vGCost + heuristic(v);
                         if (vFlags.state !== _constants.REACHED) {
-                            this.pQ.insert(v, eCost);
-                            this._reach(v, e, eCost, onReach);
+                            this.pQ.insert(v, vFCost);
+                            this._reach(v, e, vFCost, vGCost, onReach);
                         } else {
-                            if (shouldUpdateKey(vFlags.cost, eCost, vFlags.inc, e)) {
-                                this.pQ.updateKey(v, eCost);
-                                this._reach(v, e, eCost, onReach);
+                            if (shouldUpdateKey(vFlags.fCost, vFCost, vFlags.inc, e)) {
+                                this.pQ.updateKey(v, vFCost);
+                                this._reach(v, e, vFCost, vGCost, onReach);
                             }
                         }
                     }
