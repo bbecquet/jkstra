@@ -42,10 +42,16 @@ class BidirectionalDijkstra {
     */
     shortestPath(source, target, options) {
         const outIteraror = new DijkstraIterator(this.graph, source,
-            Object.assign({}, options, { direction: OUT, flagKey: this.outKey })
+            Object.assign({},
+                options,
+                options.heuristicOut ? { heuristic: options.heuristicOut } : {},
+                { direction: OUT, flagKey: this.outKey })
         );
         const inIterator = new DijkstraIterator(this.graph, target,
-            Object.assign({}, options, { direction: IN, flagKey: this.inKey })
+            Object.assign({},
+                options,
+                options.heuristicIn ? { heuristic: options.heuristicIn } : {},
+                { direction: IN, flagKey: this.inKey })
         );
         this.outFlagger = new NodeFlagger(this.graph, this.outKey);
         this.inFlagger = new NodeFlagger(this.graph, this.inKey);

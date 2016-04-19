@@ -94,7 +94,8 @@ function init() {
         };
         if (useHeuristic) {
             if (bidirectional) {
-                options.heuristic = n => distance(n, from) + distance(n, to);
+                options.heuristicOut = n => distance(n, to);
+                options.heuristicIn = n => distance(n, from);
             } else {
                 options.heuristic = n => distance(n, to);
             }

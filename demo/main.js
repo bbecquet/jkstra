@@ -122,8 +122,11 @@ function init() {
         };
         if (useHeuristic) {
             if (bidirectional) {
-                options.heuristic = function (n) {
-                    return distance(n, from) + distance(n, to);
+                options.heuristicOut = function (n) {
+                    return distance(n, to);
+                };
+                options.heuristicIn = function (n) {
+                    return distance(n, from);
                 };
             } else {
                 options.heuristic = function (n) {

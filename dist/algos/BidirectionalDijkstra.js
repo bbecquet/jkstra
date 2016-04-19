@@ -68,8 +68,8 @@ var BidirectionalDijkstra = function () {
     }, {
         key: 'shortestPath',
         value: function shortestPath(source, target, options) {
-            var outIteraror = new _DijkstraIterator2.default(this.graph, source, _extends({}, options, { direction: _constants.OUT, flagKey: this.outKey }));
-            var inIterator = new _DijkstraIterator2.default(this.graph, target, _extends({}, options, { direction: _constants.IN, flagKey: this.inKey }));
+            var outIteraror = new _DijkstraIterator2.default(this.graph, source, _extends({}, options, options.heuristicOut ? { heuristic: options.heuristicOut } : {}, { direction: _constants.OUT, flagKey: this.outKey }));
+            var inIterator = new _DijkstraIterator2.default(this.graph, target, _extends({}, options, options.heuristicIn ? { heuristic: options.heuristicIn } : {}, { direction: _constants.IN, flagKey: this.inKey }));
             this.outFlagger = new _nodeFlagger2.default(this.graph, this.outKey);
             this.inFlagger = new _nodeFlagger2.default(this.graph, this.inKey);
 
