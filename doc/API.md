@@ -1,7 +1,7 @@
 API
 ===
 
-`jKstra.Graph`
+`Graph`
 ---
 
 Represents a weighted directed graph.
@@ -23,3 +23,19 @@ Method | Returns | Description
 `edge(props)` | `Edge` | Returns the first edge found in the graph with data matching the given props, or `null` if not found.
 `outEdges(vertex, [function(e)])` | `Array<Edge>` | Returns all edges having the given vertex as start, optionally applying a filtering function.
 `inEdges(vertex, [function(e)])` | `Array<Edge>` | Returns all edges having the given vertex as end, optionally applying a filtering function.
+
+`core.PriorityQueue`
+---
+
+A generic, updatable priority queue, based on a binary heap implementation.
+
+Property | Type | Description
+---|---|---
+count | `Integer` | Number of items stored in the queue.
+
+Method | Returns | Description
+---|---|---
+`insert(element, key)`| `Vertex` | Adds an item to the queue, with a key used as sorting value.
+`pop()` | `{elt, key}` | Removes and returns the first item of the queue, with its associated key.
+`peek()` | `{elt, key}` | Reads the first item of the queue, with its associated key, without removing it.
+`updateKey(element, newKey)` | - | Updates the key associated with an element.
