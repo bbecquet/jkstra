@@ -1,8 +1,8 @@
 /* global jKstra */
 
 function init() {
-    const gridW = 25;
-    const gridH = 25;
+    const gridW = 50;
+    const gridH = 30;
     const linearCost = 1;
     const diagonalCost = Math.sqrt(2);
 
@@ -65,6 +65,7 @@ function init() {
             elements.item(i).classList.remove('onTree');
         }
         document.getElementById('pathCost').innerHTML = '';
+        document.getElementById('settledNodes').innerHTML = '';
     }
 
     function getTotalCost(path) {
@@ -79,25 +80,33 @@ function init() {
     }
 
     function computePath(from, to, bidirectional, useHeuristic) {
+        let nbSettledNodes = 0;
         const dijkstra = bidirectional ?
             new jKstra.algos.BidirectionalDijkstra(graph) :
             new jKstra.algos.Dijkstra(graph);
-        const path = dijkstra.shortestPath(from, to, {
+        const options = {
             edgeCost: e => e.data,
             onSettle: n => {
                 // mark nodes added to the tree
                 document.getElementById(nodeToCellId(n)).classList.add('onTree');
-            },
-            heuristic: useHeuristic ?
-                n => distance(n, to) :
-                n => 0
-        });
+                nbSettledNodes++;
+            }
+        };
+        if (useHeuristic) {
+            if (bidirectional) {
+                options.heuristic = n => distance(n, from) + distance(n, to);
+            } else {
+                options.heuristic = n => distance(n, to);
+            }
+        }
+        const path = dijkstra.shortestPath(from, to, options);
         // mark nodes on the shortestPath
         path.map(e => e.from)
             .concat(to)
             .forEach(node => { document.getElementById(nodeToCellId(node)).classList.add('onPath'); });
 
         document.getElementById('pathCost').innerHTML = getTotalCost(path);
+        document.getElementById('settledNodes').innerHTML = nbSettledNodes;
     }
 
     document.getElementById('grid').addEventListener('click', e => {

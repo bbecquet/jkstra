@@ -142,8 +142,7 @@ var BidirectionalDijkstra = function () {
 
     }, {
         key: 'shortestPath',
-        value: function shortestPath(source, target, opts) {
-            var options = _extends({}, BidirectionalDijkstra.defaultTraversalOptions, opts);
+        value: function shortestPath(source, target, options) {
             var outIteraror = new _DijkstraIterator2.default(this.graph, source, _extends({}, options, { direction: _constants.OUT, flagKey: this.outKey }));
             var inIterator = new _DijkstraIterator2.default(this.graph, target, _extends({}, options, { direction: _constants.IN, flagKey: this.inKey }));
             this.outFlagger = new _nodeFlagger2.default(this.graph, this.outKey);
@@ -173,11 +172,6 @@ var BidirectionalDijkstra = function () {
     return BidirectionalDijkstra;
 }();
 
-BidirectionalDijkstra.defaultTraversalOptions = {
-    isFinished: function isFinished() {
-        return false;
-    }
-};
 ;
 
 exports.default = BidirectionalDijkstra;
@@ -345,8 +339,8 @@ var DijkstraIterator = function () {
         value: function _initTraversal() {
             // reset node tagging
             this.flags.clearFlags(this.graph);
-            this.pQ.insert(this.source, 0);
-            this._reach(this.source, null, 0, this.options.onReach);
+            this.pQ.insert(this.source, this.options.heuristic(this.source));
+            this._reach(this.source, null, this.options.heuristic(this.source), this.options.onReach);
         }
     }, {
         key: 'next',

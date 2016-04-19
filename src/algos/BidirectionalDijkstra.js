@@ -29,10 +29,6 @@ class BidirectionalDijkstra {
         return edges;
     }
 
-    static defaultTraversalOptions = {
-        isFinished: () => false
-    }
-
     _hasBeenReachBothWays(node) {
         const outState = this.outFlagger.getFlags(node);
         const inState = this.inFlagger.getFlags(node);
@@ -44,8 +40,7 @@ class BidirectionalDijkstra {
     /**
     The most common use of Dijkstra traversal
     */
-    shortestPath(source, target, opts) {
-        const options = Object.assign({}, BidirectionalDijkstra.defaultTraversalOptions, opts);
+    shortestPath(source, target, options) {
         const outIteraror = new DijkstraIterator(this.graph, source,
             Object.assign({}, options, { direction: OUT, flagKey: this.outKey })
         );

@@ -59,8 +59,8 @@ var DijkstraIterator = function () {
         value: function _initTraversal() {
             // reset node tagging
             this.flags.clearFlags(this.graph);
-            this.pQ.insert(this.source, 0);
-            this._reach(this.source, null, 0, this.options.onReach);
+            this.pQ.insert(this.source, this.options.heuristic(this.source));
+            this._reach(this.source, null, this.options.heuristic(this.source), this.options.onReach);
         }
     }, {
         key: 'next',

@@ -3,8 +3,8 @@
 /* global jKstra */
 
 function init() {
-    var gridW = 25;
-    var gridH = 25;
+    var gridW = 50;
+    var gridH = 30;
     var linearCost = 1;
     var diagonalCost = Math.sqrt(2);
 
@@ -89,6 +89,7 @@ function init() {
             elements.item(_i5).classList.remove('onTree');
         }
         document.getElementById('pathCost').innerHTML = '';
+        document.getElementById('settledNodes').innerHTML = '';
     }
 
     function getTotalCost(path) {
@@ -107,21 +108,30 @@ function init() {
     }
 
     function computePath(from, to, bidirectional, useHeuristic) {
+        var nbSettledNodes = 0;
         var dijkstra = bidirectional ? new jKstra.algos.BidirectionalDijkstra(graph) : new jKstra.algos.Dijkstra(graph);
-        var path = dijkstra.shortestPath(from, to, {
+        var options = {
             edgeCost: function edgeCost(e) {
                 return e.data;
             },
             onSettle: function onSettle(n) {
                 // mark nodes added to the tree
                 document.getElementById(nodeToCellId(n)).classList.add('onTree');
-            },
-            heuristic: useHeuristic ? function (n) {
-                return distance(n, to);
-            } : function (n) {
-                return 0;
+                nbSettledNodes++;
             }
-        });
+        };
+        if (useHeuristic) {
+            if (bidirectional) {
+                options.heuristic = function (n) {
+                    return distance(n, from) + distance(n, to);
+                };
+            } else {
+                options.heuristic = function (n) {
+                    return distance(n, to);
+                };
+            }
+        }
+        var path = dijkstra.shortestPath(from, to, options);
         // mark nodes on the shortestPath
         path.map(function (e) {
             return e.from;
@@ -130,6 +140,7 @@ function init() {
         });
 
         document.getElementById('pathCost').innerHTML = getTotalCost(path);
+        document.getElementById('settledNodes').innerHTML = nbSettledNodes;
     }
 
     document.getElementById('grid').addEventListener('click', function (e) {
