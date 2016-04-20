@@ -59,3 +59,23 @@ Method | Returns | Description
 `pop()` | `{elt, key}` | Removes and returns the first item of the queue, with its associated key.
 `peek()` | `{elt, key}` | Reads the first item of the queue, with its associated key, without removing it.
 `updateKey(element, newKey)` | - | Updates the key associated with an element.
+
+
+`Direction`
+---
+
+Constants used in contexts where it's needed to qualify the direction of travel on the edges.
+
+Constant | Description
+---|---
+`jkStra.OUT` | represents the direction of edges going out of their origin vertices.
+`jkStra.IN` | represents the direction of edges arriving at their end vertices.
+
+`algos.DijkstraIterator`
+---
+
+`algos.Dijkstra`
+---
+
+`algos.BidirectionalDijkstra`
+---
