@@ -24,6 +24,11 @@ console.log(e.from === v1);     // => true
 console.log(e.to === v2);       // => true
 ```
 
+Property | Type | Description
+---|---|---
+vertexCount | `Integer` | Number of vertices in the graph.
+edgeCount | `Integer` | Number of directed edges in the graph.
+
 Method | Returns | Description
 ---|---|---
 `addVertex([data])`| `Vertex` | Adds a new vertex to the graph, containing the given data.
