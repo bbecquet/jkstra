@@ -10,15 +10,9 @@ describe('PriorityQueue', function() {
         pq = new PriorityQueue();
     });
 
-    describe('insert()', function() {
-        it('fails if no object is provided', function() {
-            assert.throw(function() { pq.insert(); });
-        });
-    });
-
     describe('pop()', function() {
-        it('fails on an empty PriorityQueue', function() {
-            assert.throw(function() { pq.pop(); });
+        it('returns null on an empty PriorityQueue', function() {
+            assert.isNull(pq.pop());
         });
         it('returns and removes the element of mininum cost', function() {
             pq.insert('a', 5);
@@ -55,8 +49,8 @@ describe('PriorityQueue', function() {
     });
 
     describe('peek()', function() {
-        it('fails on an empty PriorityQueue', function() {
-            assert.throw(function() { pq.peek(); }, 'Empty queue');
+        it('returns null on an empty PriorityQueue', function() {
+            assert.isNull(pq.peek());
         });
 
         it('returns the element of mininum cost without removing it from the queue', function() {
@@ -71,17 +65,6 @@ describe('PriorityQueue', function() {
     });
 
     describe('updateKey()', function() {
-        it('fails on an empty queue', function() {
-            assert.throw(function() { pq.updateKey('d', 0); }, Error);
-        });
-
-        it('fails when the element is not in the queue', function() {
-            pq.insert('a', 1);
-            pq.insert('b', 2);
-            pq.insert('c', 3);
-            assert.throw(function() { pq.updateKey('d', 0); }, Error);
-        });
-
         it('changes the order of the elements when the key is greater', function() {
             pq.insert('a', 1);
             pq.insert('b', 2);

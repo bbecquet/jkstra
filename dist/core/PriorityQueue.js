@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -24,12 +24,12 @@ var PriorityQueue = function () {
 
 
     _createClass(PriorityQueue, [{
-        key: '_compare',
+        key: "_compare",
         value: function _compare(a, b) {
             return a.key - b.key;
         }
     }, {
-        key: '_bubbleUp',
+        key: "_bubbleUp",
         value: function _bubbleUp(idx) {
             var element = this.heap[idx];
             var parentIdx = void 0;
@@ -52,7 +52,7 @@ var PriorityQueue = function () {
             }
         }
     }, {
-        key: '_sinkDown',
+        key: "_sinkDown",
         value: function _sinkDown(idx) {
             var length = this.heap.length;
             var element = this.heap[idx];
@@ -92,7 +92,7 @@ var PriorityQueue = function () {
             }
         }
     }, {
-        key: '_findElementIndex',
+        key: "_findElementIndex",
         value: function _findElementIndex(elt) {
             for (var i = 0, l = this.heap.length; i < l; i++) {
                 if (this.heap[i].elt === elt) {
@@ -102,19 +102,16 @@ var PriorityQueue = function () {
             return -1;
         }
     }, {
-        key: 'insert',
+        key: "insert",
         value: function insert(element, key) {
-            if (typeof element === 'undefined') {
-                throw new Error('No element provided');
-            }
             this.heap.push({ elt: element, key: key });
             this._bubbleUp(this.heap.length - 1);
         }
     }, {
-        key: 'pop',
+        key: "pop",
         value: function pop() {
             if (this.heap.length === 0) {
-                throw new Error('Empty queue');
+                return null;
             }
             var elt = this.heap[0];
             var end = this.heap.pop();
@@ -127,19 +124,19 @@ var PriorityQueue = function () {
             return elt;
         }
     }, {
-        key: 'peek',
+        key: "peek",
         value: function peek() {
             if (this.heap.length === 0) {
-                throw new Error('Empty queue');
+                return null;
             }
             return this.heap[0];
         }
     }, {
-        key: 'updateKey',
+        key: "updateKey",
         value: function updateKey(element, newKey) {
             var idx = this._findElementIndex(element);
             if (idx === -1) {
-                throw new Error('The element is not in the this.heap');
+                return;
             }
             var oldKey = this.heap[idx].key;
             this.heap[idx].key = newKey;
@@ -150,7 +147,7 @@ var PriorityQueue = function () {
             }
         }
     }, {
-        key: 'count',
+        key: "count",
         get: function get() {
             return this.heap.length;
         }

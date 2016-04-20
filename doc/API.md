@@ -56,8 +56,8 @@ count | `Integer` | Number of items stored in the queue.
 Method | Returns | Description
 ---|---|---
 `insert(element, key)`| `Vertex` | Adds an item to the queue, with a key used as sorting value.
-`pop()` | `{elt, key}` | Removes and returns the first item of the queue, with its associated key.
-`peek()` | `{elt, key}` | Reads the first item of the queue, with its associated key, without removing it.
+`pop()` | `{elt, key}` | Removes and returns the first item of the queue, with its associated key, or `null` if the queue is empty.
+`peek()` | `{elt, key}` | Reads the first item of the queue, with its associated key, without removing it, or `null` if the queue is empty.
 `updateKey(element, newKey)` | - | Updates the key associated with an element.
 
 

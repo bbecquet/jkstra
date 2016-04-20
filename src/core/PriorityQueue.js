@@ -86,16 +86,13 @@ class PriorityQueue {
     }
 
     insert(element, key) {
-        if (typeof element === 'undefined') {
-            throw new Error('No element provided');
-        }
         this.heap.push({elt: element, key: key});
         this._bubbleUp(this.heap.length - 1);
     }
 
     pop() {
         if (this.heap.length === 0) {
-            throw new Error('Empty queue');
+            return null;
         }
         const elt = this.heap[0];
         const end = this.heap.pop();
@@ -110,7 +107,7 @@ class PriorityQueue {
 
     peek() {
         if (this.heap.length === 0) {
-            throw new Error('Empty queue');
+            return null;
         }
         return this.heap[0];
     }
@@ -118,7 +115,7 @@ class PriorityQueue {
     updateKey(element, newKey) {
         const idx = this._findElementIndex(element);
         if (idx === -1) {
-            throw new Error('The element is not in the this.heap');
+            return;
         }
         const oldKey = this.heap[idx].key;
         this.heap[idx].key = newKey;
