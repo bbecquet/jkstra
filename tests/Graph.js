@@ -52,6 +52,34 @@ describe('Graph', function() {
         });
     });
 
+    describe('vertexCount', function() {
+        it('returns the correct number of vertices', function() {
+            assert.equal(graph.vertexCount, 0);
+            const u = graph.addVertex();
+            graph.addVertex();
+            graph.addVertex();
+            assert.equal(graph.vertexCount, 3);
+            graph.removeVertex(u);
+            assert.equal(graph.vertexCount, 2);
+        });
+    });
+
+    describe('edgeCount', function() {
+        it('returns the correct number of edges', function() {
+            assert.equal(graph.edgeCount, 0);
+            const u = graph.addVertex();
+            const v = graph.addVertex();
+            const w = graph.addVertex();
+            assert.equal(graph.edgeCount, 0);
+            const uv = graph.addEdge(u, v);
+            graph.addEdge(u, w);
+            graph.addEdgePair(v, w);
+            assert.equal(graph.edgeCount, 4);
+            graph.removeEdge(uv);
+            assert.equal(graph.edgeCount, 3);
+        });
+    });
+
     describe('incidentEdges()', function() {
         let vA, vB, vC;
         let eAB, eAC;

@@ -642,6 +642,16 @@ var Graph = function () {
                 return action(e);
             });
         }
+    }, {
+        key: 'vertexCount',
+        get: function get() {
+            return this.vertices.length;
+        }
+    }, {
+        key: 'edgeCount',
+        get: function get() {
+            return this.edges.length;
+        }
     }]);
 
     return Graph;

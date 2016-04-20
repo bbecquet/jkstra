@@ -7,6 +7,14 @@ class Graph {
         this.edges = [];
     }
 
+    get vertexCount() {
+        return this.vertices.length;
+    }
+
+    get edgeCount() {
+        return this.edges.length;
+    }
+
     addVertex(data) {
         const vertex = {
             _in: [],
