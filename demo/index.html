@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<title>Example jKstra</title>
+	<title>jKstra demo</title>
 	<script src="main.js"></script>
 	<script src="../build/jKstra.js"></script>
 	<style>
@@ -42,17 +42,23 @@
 </head>
 
 <body>
-    <table><tbody id="grid"></tbody></table>
-    <div>
-        <p>
-            <label>Use A* (with distance heuristic)<input type="checkbox" id="useHeuristic" /></label>
-        </p>
-        <p>
-            <label>Bidirectional<input type="checkbox" id="bidirectional" /></label>
-        </p>
-        <button id="computePath">Compute shortest path</button>
+    <h1>jKstra demo</h1>
+    <div id="explanation">
+        <p>This demonstrates the path finding calpabilities of the <b><a href="https://github.com/bbecquet/jKstra">jKstra</a></b> library.
+        <i>jKstra</i> stores graphs internally as adjacency lists, not matrices, but for a demo it's easier to picture it like that.</p>
+        <p>Here each cell is a node (vertex) in the graph. It's related to its adjacent vertices by edges with travel cost = 1
+        (for horizontally and vertically adjacent nodes), or √2 (for diagonally adjacent nodes). Black cells are obstacles.</p>
+    </div>
+    <div id="controls">
+        <p><b>Left-click to set the starting point. Right-click for the end point.</b></p>
+        <fieldset>
+            <p><label><input type="checkbox" id="useHeuristic" />Use A* (with distance heuristic)</label></p>
+            <p><label><input type="checkbox" id="bidirectional" />Bidirectional</label></p>
+            <button id="computePath">Compute shortest path</button>
+        </fieldset>
         <p>Path cost: <span id="pathCost"></span></p>
         <p>Settled nodes: <span id="settledNodes"></span></p>
     </div>
+    <table><tbody id="grid"></tbody></table>
 </body>
 </html>

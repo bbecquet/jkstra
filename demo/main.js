@@ -146,35 +146,37 @@ function init() {
         document.getElementById('settledNodes').innerHTML = nbSettledNodes;
     }
 
-    document.getElementById('grid').addEventListener('click', function (e) {
-        var cell = e.target;
+    function setPathPoint(cell, isStart) {
+        var previousPoint = isStart ? start : end;
+        var className = isStart ? 'start' : 'end';
+
         if (cell && cell.matches('td')) {
             if (cell.matches('.off')) {
                 return;
             }
-            if (start) {
-                document.getElementById(nodeToCellId(start)).classList.remove('start');
+            if (previousPoint) {
+                document.getElementById(nodeToCellId(previousPoint)).classList.remove(className);
                 clearPath();
             }
-            cell.classList.add('start');
-            start = graph.vertex(cellIdToIJ(cell.id));
+            cell.classList.add(className);
+            if (isStart) {
+                start = graph.vertex(cellIdToIJ(cell.id));
+            } else {
+                end = graph.vertex(cellIdToIJ(cell.id));
+            }
+            // if (start && end) {
+            //     document.getElementById('computePath').click();
+            // }
         }
+    }
+
+    document.getElementById('grid').addEventListener('click', function (e) {
+        setPathPoint(e.target, true);
     });
 
     document.getElementById('grid').addEventListener('contextmenu', function (e) {
         e.preventDefault();
-        var cell = e.target;
-        if (cell && cell.matches('td')) {
-            if (cell.matches('.off')) {
-                return;
-            }
-            if (end) {
-                document.getElementById(nodeToCellId(end)).classList.remove('end');
-                clearPath();
-            }
-            cell.classList.add('end');
-            end = graph.vertex(cellIdToIJ(cell.id));
-        }
+        setPathPoint(e.target, false);
     });
 
     document.getElementById('computePath').addEventListener('click', function () {
