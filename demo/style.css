@@ -1,32 +1,62 @@
+body {
+    font-family: sans-serif;
+    padding: 18px;
+}
+
+#controls {
+    display: flex;
+    margin-bottom: 30px;
+    background-color: #efefef;
+    border-radius: 3px;
+}
+
+#controls > div {
+    flex: 1;
+    padding: 6px;
+}
+
+input[type=checkbox] {
+    margin-right: 6px;
+}
+
+table {
+    border-collapse: collapse;
+}
+
 td {
-    width: 20px;
-    height: 20px;
-    border: 1px solid silver;
-    position: relative;
+    width: 15px;
+    height: 15px;
+    border: 1px solid #ccc;
+}
+
+td:hover {
+    background-color: #efefef;
 }
 .onTree { background-color: #faa; }
 .onPath { background-color: red; }
-.off { background-color: black; }
+.off { background-color: black !important; }
 .start:before {
     content: '';
     display: block;
-    width: 18px;
-    height: 18px;
+    width: 12px;
+    height: 12px;
     transform: translate(-50%, -50%);
-    border: 2px solid blue;
-    position: absolute;
+    border: 3px solid blue;
+    position: relative;
     top: 50%;
     left: 50%;
+    box-sizing: border-box;
 }
 .end:after {
     content: '';
     display: block;
-    width: 15px;
-    height: 15px;
+    width: 12px;
+    height: 12px;
     transform: translate(-50%, -50%);
     border-radius: 50%;
     background-color: blue;
-    position: absolute;
+    position: relative;
     top: 50%;
     left: 50%;
+    box-sizing: border-box;
 }

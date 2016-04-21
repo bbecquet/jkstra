@@ -16,15 +16,18 @@
         <p>Here each cell is a node (vertex) in the graph. It's related to its adjacent vertices by edges with travel cost = 1
         (for horizontally and vertically adjacent nodes), or √2 (for diagonally adjacent nodes). Black cells are obstacles.</p>
     </div>
+    <p><b>Left-click to set the starting point. Right-click for the end point.</b></p>
     <div id="controls">
-        <p><b>Left-click to set the starting point. Right-click for the end point.</b></p>
-        <fieldset>
+        <div>
             <p><label><input type="checkbox" id="useHeuristic" />Use A* (with distance heuristic)</label></p>
             <p><label><input type="checkbox" id="bidirectional" />Bidirectional</label></p>
             <button id="computePath">Compute shortest path</button>
-        </fieldset>
-        <p>Path cost: <span id="pathCost"></span></p>
-        <p>Settled nodes: <span id="settledNodes"></span></p>
+        </div>
+        <div id="result">
+            <p>Path cost: <span id="pathCost"></span></p>
+            <p>Settled nodes: <span id="settledNodes"></span></p>
+        </div>
+    </div>
     </div>
     <table><tbody id="grid"></tbody></table>
 </body>
