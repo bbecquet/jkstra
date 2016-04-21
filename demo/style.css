@@ -1,0 +1,32 @@
+td {
+    width: 20px;
+    height: 20px;
+    border: 1px solid silver;
+    position: relative;
+}
+.onTree { background-color: #faa; }
+.onPath { background-color: red; }
+.off { background-color: black; }
+.start:before {
+    content: '';
+    display: block;
+    width: 18px;
+    height: 18px;
+    transform: translate(-50%, -50%);
+    border: 2px solid blue;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+.end:after {
+    content: '';
+    display: block;
+    width: 15px;
+    height: 15px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background-color: blue;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
