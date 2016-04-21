@@ -35,17 +35,8 @@ td:hover {
 .onTree { background-color: #faa; }
 .onPath { background-color: red; }
 .off { background-color: black !important; }
-.start:before {
-    content: '';
-    display: block;
-    width: 12px;
-    height: 12px;
-    transform: translate(-50%, -50%);
-    border: 3px solid blue;
-    position: relative;
-    top: 50%;
-    left: 50%;
-    box-sizing: border-box;
+.start {
+    box-shadow: inset 0 0 0px 3px blue;
 }
 .end:after {
     content: '';
