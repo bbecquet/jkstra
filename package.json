@@ -43,5 +43,8 @@
   "directories": {
     "test": "test"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "updatable-priority-queue": "0.0.1"
+  }
 }

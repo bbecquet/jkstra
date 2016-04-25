@@ -1,4 +1,4 @@
-import PriorityQueue from '../core/PriorityQueue.js';
+import PriorityQueue from 'updatable-priority-queue';
 import NodeFlagger from './nodeFlagger.js';
 import { OUT, SETTLED, REACHED } from '../core/constants.js';
 
@@ -63,8 +63,7 @@ class DijkstraIterator {
             shouldUpdateKey
         } = this.options;
 
-        const kv = this.pQ.pop();
-        const u = kv.elt;
+        const u = this.pQ.pop().item;
         let v;
         let vFlags;
         const uGCost = this.flags.getFlags(u).gCost;

@@ -72,7 +72,7 @@ function BFS(graph, opts) {
 exports.default = BFS;
 module.exports = exports['default'];
 
-},{"../core/constants.js":8}],2:[function(require,module,exports){
+},{"../core/constants.js":7}],2:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -177,7 +177,7 @@ var BidirectionalDijkstra = function () {
 exports.default = BidirectionalDijkstra;
 module.exports = exports['default'];
 
-},{"../algos/DijkstraIterator.js":4,"../core/constants.js":8,"./nodeFlagger.js":5}],3:[function(require,module,exports){
+},{"../algos/DijkstraIterator.js":4,"../core/constants.js":7,"./nodeFlagger.js":5}],3:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -277,7 +277,7 @@ Dijkstra.defaultTraversalOptions = {
 exports.default = Dijkstra;
 module.exports = exports['default'];
 
-},{"../algos/DijkstraIterator.js":4,"../core/constants.js":8,"./nodeFlagger.js":5}],4:[function(require,module,exports){
+},{"../algos/DijkstraIterator.js":4,"../core/constants.js":7,"./nodeFlagger.js":5}],4:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -288,9 +288,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _PriorityQueue = require('../core/PriorityQueue.js');
+var _updatablePriorityQueue = require('updatable-priority-queue');
 
-var _PriorityQueue2 = _interopRequireDefault(_PriorityQueue);
+var _updatablePriorityQueue2 = _interopRequireDefault(_updatablePriorityQueue);
 
 var _nodeFlagger = require('./nodeFlagger.js');
 
@@ -313,7 +313,7 @@ var DijkstraIterator = function () {
         this.options = _extends({}, DijkstraIterator.defaultOptions, opts);
         this.flags = new _nodeFlagger2.default(this.graph, this.options.flagKey);
 
-        this.pQ = new _PriorityQueue2.default();
+        this.pQ = new _updatablePriorityQueue2.default();
         this._initTraversal();
     }
 
@@ -361,8 +361,7 @@ var DijkstraIterator = function () {
             var shouldUpdateKey = _options.shouldUpdateKey;
 
 
-            var kv = this.pQ.pop();
-            var u = kv.elt;
+            var u = this.pQ.pop().item;
             var v = void 0;
             var vFlags = void 0;
             var uGCost = this.flags.getFlags(u).gCost;
@@ -438,7 +437,7 @@ DijkstraIterator.defaultOptions = {
 exports.default = DijkstraIterator;
 module.exports = exports['default'];
 
-},{"../core/PriorityQueue.js":7,"../core/constants.js":8,"./nodeFlagger.js":5}],5:[function(require,module,exports){
+},{"../core/constants.js":7,"./nodeFlagger.js":5,"updatable-priority-queue":10}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -662,7 +661,101 @@ var Graph = function () {
 exports.default = Graph;
 module.exports = exports['default'];
 
-},{"./constants.js":8,"./utils.js":9}],7:[function(require,module,exports){
+},{"./constants.js":7,"./utils.js":8}],7:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var OUT = exports.OUT = true;
+var IN = exports.IN = false;
+var REACHED = exports.REACHED = 1;
+var SETTLED = exports.SETTLED = 2;
+
+},{}],8:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+exports.propsMatch = propsMatch;
+
+function isScalar(o) {
+    return (/boolean|number|string/.test(typeof o === "undefined" ? "undefined" : _typeof(o))
+    );
+};
+
+function propsMatch(set, subSet) {
+    if (subSet === null) {
+        return set === null;
+    }
+
+    if (isScalar(set)) {
+        return isScalar(subSet) && set === subSet;
+    }
+
+    for (var p in subSet) {
+        if (set.hasOwnProperty(p)) {
+            if (!propsMatch(set[p], subSet[p])) {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+    return true;
+};
+
+},{}],9:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _BFS = require('./algos/BFS.js');
+
+var _BFS2 = _interopRequireDefault(_BFS);
+
+var _DijkstraIterator = require('./algos/DijkstraIterator.js');
+
+var _DijkstraIterator2 = _interopRequireDefault(_DijkstraIterator);
+
+var _Dijkstra = require('./algos/Dijkstra.js');
+
+var _Dijkstra2 = _interopRequireDefault(_Dijkstra);
+
+var _BidirectionalDijkstra = require('./algos/BidirectionalDijkstra.js');
+
+var _BidirectionalDijkstra2 = _interopRequireDefault(_BidirectionalDijkstra);
+
+var _Graph = require('./core/Graph.js');
+
+var _Graph2 = _interopRequireDefault(_Graph);
+
+var _constants = require('./core/constants.js');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var jKstra = {
+    IN: _constants.IN,
+    OUT: _constants.OUT,
+    Graph: _Graph2.default,
+    algos: {
+        BFS: _BFS2.default,
+        Dijkstra: _Dijkstra2.default,
+        BidirectionalDijkstra: _BidirectionalDijkstra2.default,
+        DijkstraIterator: _DijkstraIterator2.default
+    }
+};
+
+exports.default = jKstra;
+module.exports = exports['default'];
+
+},{"./algos/BFS.js":1,"./algos/BidirectionalDijkstra.js":2,"./algos/Dijkstra.js":3,"./algos/DijkstraIterator.js":4,"./core/Graph.js":6,"./core/constants.js":7}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -672,11 +765,6 @@ Object.defineProperty(exports, "__esModule", {
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
-Binary this.heap implementation of a priority queue
-with an updateKey method.
-*/
 
 var PriorityQueue = function () {
     function PriorityQueue() {
@@ -758,9 +846,10 @@ var PriorityQueue = function () {
         }
     }, {
         key: "_findElementIndex",
-        value: function _findElementIndex(elt) {
+        value: function _findElementIndex(item) {
+            // TODO: optimize
             for (var i = 0, l = this.heap.length; i < l; i++) {
-                if (this.heap[i].elt === elt) {
+                if (this.heap[i].item === item) {
                     return i;
                 }
             }
@@ -768,8 +857,8 @@ var PriorityQueue = function () {
         }
     }, {
         key: "insert",
-        value: function insert(element, key) {
-            this.heap.push({ elt: element, key: key });
+        value: function insert(item, key) {
+            this.heap.push({ item: item, key: key });
             this._bubbleUp(this.heap.length - 1);
         }
     }, {
@@ -778,7 +867,7 @@ var PriorityQueue = function () {
             if (this.heap.length === 0) {
                 return null;
             }
-            var elt = this.heap[0];
+            var element = this.heap[0];
             var end = this.heap.pop();
             // replace the first element by the last,
             // and let it sink to its right place
@@ -786,7 +875,7 @@ var PriorityQueue = function () {
                 this.heap[0] = end;
                 this._sinkDown(0);
             }
-            return elt;
+            return element;
         }
     }, {
         key: "peek",
@@ -798,8 +887,8 @@ var PriorityQueue = function () {
         }
     }, {
         key: "updateKey",
-        value: function updateKey(element, newKey) {
-            var idx = this._findElementIndex(element);
+        value: function updateKey(item, newKey) {
+            var idx = this._findElementIndex(item);
             if (idx === -1) {
                 return;
             }
@@ -826,99 +915,5 @@ var PriorityQueue = function () {
 exports.default = PriorityQueue;
 module.exports = exports['default'];
 
-},{}],8:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var OUT = exports.OUT = true;
-var IN = exports.IN = false;
-var REACHED = exports.REACHED = 1;
-var SETTLED = exports.SETTLED = 2;
-
-},{}],9:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-
-exports.propsMatch = propsMatch;
-
-function isScalar(o) {
-    return (/boolean|number|string/.test(typeof o === "undefined" ? "undefined" : _typeof(o))
-    );
-};
-
-function propsMatch(set, subSet) {
-    if (subSet === null) {
-        return set === null;
-    }
-
-    if (isScalar(set)) {
-        return isScalar(subSet) && set === subSet;
-    }
-
-    for (var p in subSet) {
-        if (set.hasOwnProperty(p)) {
-            if (!propsMatch(set[p], subSet[p])) {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-    return true;
-};
-
-},{}],10:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _BFS = require('./algos/BFS.js');
-
-var _BFS2 = _interopRequireDefault(_BFS);
-
-var _DijkstraIterator = require('./algos/DijkstraIterator.js');
-
-var _DijkstraIterator2 = _interopRequireDefault(_DijkstraIterator);
-
-var _Dijkstra = require('./algos/Dijkstra.js');
-
-var _Dijkstra2 = _interopRequireDefault(_Dijkstra);
-
-var _BidirectionalDijkstra = require('./algos/BidirectionalDijkstra.js');
-
-var _BidirectionalDijkstra2 = _interopRequireDefault(_BidirectionalDijkstra);
-
-var _Graph = require('./core/Graph.js');
-
-var _Graph2 = _interopRequireDefault(_Graph);
-
-var _constants = require('./core/constants.js');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var jKstra = {
-    IN: _constants.IN,
-    OUT: _constants.OUT,
-    Graph: _Graph2.default,
-    algos: {
-        BFS: _BFS2.default,
-        Dijkstra: _Dijkstra2.default,
-        BidirectionalDijkstra: _BidirectionalDijkstra2.default,
-        DijkstraIterator: _DijkstraIterator2.default
-    }
-};
-
-exports.default = jKstra;
-module.exports = exports['default'];
-
-},{"./algos/BFS.js":1,"./algos/BidirectionalDijkstra.js":2,"./algos/Dijkstra.js":3,"./algos/DijkstraIterator.js":4,"./core/Graph.js":6,"./core/constants.js":8}]},{},[10])(10)
+},{}]},{},[9])(9)
 });

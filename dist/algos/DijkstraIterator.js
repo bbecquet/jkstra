@@ -8,9 +8,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _PriorityQueue = require('../core/PriorityQueue.js');
+var _updatablePriorityQueue = require('updatable-priority-queue');
 
-var _PriorityQueue2 = _interopRequireDefault(_PriorityQueue);
+var _updatablePriorityQueue2 = _interopRequireDefault(_updatablePriorityQueue);
 
 var _nodeFlagger = require('./nodeFlagger.js');
 
@@ -33,7 +33,7 @@ var DijkstraIterator = function () {
         this.options = _extends({}, DijkstraIterator.defaultOptions, opts);
         this.flags = new _nodeFlagger2.default(this.graph, this.options.flagKey);
 
-        this.pQ = new _PriorityQueue2.default();
+        this.pQ = new _updatablePriorityQueue2.default();
         this._initTraversal();
     }
 
@@ -81,8 +81,7 @@ var DijkstraIterator = function () {
             var shouldUpdateKey = _options.shouldUpdateKey;
 
 
-            var kv = this.pQ.pop();
-            var u = kv.elt;
+            var u = this.pQ.pop().item;
             var v = void 0;
             var vFlags = void 0;
             var uGCost = this.flags.getFlags(u).gCost;

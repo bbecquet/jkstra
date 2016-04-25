@@ -6,7 +6,7 @@ API
 
 Represents a weighted directed graph. Manipulates graph **vertices** (aka. nodes) & **edges** as anonymous objects created through the `addVertex` & `addEdge` methods, respectively. Any kind of data can be assigned to vertices and edges through the `data` attribute of these methods. It is then accessible on the `data` property of this object.
 
-`Edge` objets have a `from` and `to` properties, which points to their extremity vertices.
+`Edge` objects have a `from` and `to` properties, which points to their extremity vertices.
 
 Access to edges from `Vertex` objects is done through the `incident/out/inEdges` methods.
 
@@ -44,23 +44,6 @@ Method | Returns | Description
 `forEachVertex(action(v))` | - | Applies a function on each vertex of the graph.
 `forEachEdge(action(e))` | - | Applies a function on each edge of the graph.
 
-`core.PriorityQueue`
----
-
-A generic, updatable priority queue, based on a binary heap implementation.
-
-Property | Type | Description
----|---|---
-count | `Integer` | Number of items stored in the queue.
-
-Method | Returns | Description
----|---|---
-`insert(element, key)`| `Vertex` | Adds an item to the queue, with a key used as sorting value.
-`pop()` | `{elt, key}` | Removes and returns the first item of the queue, with its associated key, or `null` if the queue is empty.
-`peek()` | `{elt, key}` | Reads the first item of the queue, with its associated key, without removing it, or `null` if the queue is empty.
-`updateKey(element, newKey)` | - | Updates the key associated with an element.
-
-
 `Direction`
 ---
 
@@ -74,8 +57,14 @@ Constant | Description
 `algos.DijkstraIterator`
 ---
 
+*TODO*
+
 `algos.Dijkstra`
 ---
 
+*TODO*
+
 `algos.BidirectionalDijkstra`
 ---
+
+*TODO*
