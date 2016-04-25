@@ -3,9 +3,11 @@ jKstra - A simple graph and routing library
 
 **jKstra** is a JavaScript library to work with **graphs** - as in "data structures", with edges and vertices, not as in "graphics".
 
-*It was made quickly as a base for a webapp that needed to run offline shortest path computations on a public transportation network.*
+[See an interactive demo](http://bbecquet.github.io/jKstra/demo/).
 
-For now it only supports simple directed graphs and provides a basic implementation of the Dijkstra's algorithm to find shortest paths in it.
+It was made originally as a base model for a webapp that needed to run offline shortest path computations on a public transportation network.
+
+For now it supports simple directed graphs and provides implementations Dijkstra and A* algorithms to find shortest paths in it.
 
 ```bash
 npm install jkstra
