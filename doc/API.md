@@ -24,10 +24,14 @@ console.log(e.from === v1);     // => true
 console.log(e.to === v2);       // => true
 ```
 
+### Properties
+
 Property | Type | Description
 ---|---|---
 vertexCount | `Integer` | Number of vertices in the graph.
 edgeCount | `Integer` | Number of directed edges in the graph.
+
+### Methods
 
 Method | Returns | Description
 ---|---|---
@@ -54,10 +58,32 @@ Constant | Description
 `jkStra.OUT` | represents the direction of edges going out of their origin vertices.
 `jkStra.IN` | represents the direction of edges arriving at their end vertices.
 
+
 `algos.DijkstraIterator`
 ---
 
-*TODO*
+An iterator which traverses a graph from a source vertex, and returns nodes in the order of the Dijkstra's algorithm.
+
+### Constructor
+```
+new DijkstraIterator(Graph graph, Vertex source, options);
+```
+
+Option | Default | Description
+---|---|---
+`direction` | `Direction.OUT` | Direction of travel on the graph.
+`edgeCost` | `(Edge, [costDone]) => 1` | The edge cost function. Can take the reaching cost of the previous node as an option.
+`heuristic` | `Vertex => 0` | An heuristic function to estimate the remaining travel cost from a node. If returns a non-zero value, effectively transforms the graph traversal to a A* algorithm.
+`onReach` | `Vertex => {}` | Function to apply to a vertex when it is added to the priority queue.
+`onSettle` | `Vertex => {}` | Function to apply to a vertex when it is removed from the priority queue, and added to shortest path tree.
+`edgeFilter` | `Edge => true` | Filter to . By default all edges are considered.
+
+### Methods
+
+Method | Returns | Description
+---|---|---
+`next()` | `{value: Vertex, done: Boolean}` | Conforms to the [iterator protocol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#iterator). Returns an object with the next vertex added to the shortest path tree as `value`, or a `done: true` field if no more vertices are available.
+
 
 `algos.Dijkstra`
 ---
