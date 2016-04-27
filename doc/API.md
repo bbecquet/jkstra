@@ -59,20 +59,46 @@ Constant | Description
 `jkStra.IN` | represents the direction of edges arriving at their end vertices.
 
 
+`algos.Dijkstra`
+---
+
+A shortest path finder using the [Dijkstra's algorithm](https://en.wikipedia.org/wiki/Dijkstra's_algorithm). Can also performs [A* algorithm searches](https://en.wikipedia.org/wiki/A*_search_algorithm), if provided with an heuristic function.
+
+### Constructor
+```js
+new jKstra.algos.Dijkstra(Graph graph);
+```
+
+### Methods
+
+Method | Returns | Description
+---|---|---
+`shortestPath(Vertex source, Vertex target, options)` | `Array<Edge>` | Returns the ordered list of edges that form the shortest path between `source` and `target` vertices, or `null` if no path has been found. Takes an `options` object of the same definition as [`DijkstraIterator`'s options](#algosdijkstraiterator).
+
+
+`algos.BidirectionalDijkstra`
+---
+
+*TODO*
+
+
 `algos.DijkstraIterator`
 ---
 
-An iterator which traverses a graph from a source vertex, and returns nodes in the order of the Dijkstra's algorithm.
+A low-level iterator which traverses a graph from a source vertex, and returns nodes in the order of the Dijkstra's algorithm.
+Used internally by `Dijkstra` & `BidirectionalDijkstra`.
 
 ### Constructor
+```js
+new jKstra.algos.DijkstraIterator(Graph graph, Vertex source, options);
 ```
-new DijkstraIterator(Graph graph, Vertex source, options);
-```
+
+<a name="dijkstra_options"></a>
 
 Option | Default | Description
 ---|---|---
 `direction` | `Direction.OUT` | Direction of travel on the graph.
-`edgeCost` | `(Edge, [costDone]) => 1` | The edge cost function. Can take the reaching cost of the previous node as an option.
+`edgeCost` | `(Edge, [costDone]) => 1` | **The edge cost function**. Can take the reaching cost of the previous node as an option.
 `heuristic` | `Vertex => 0` | An heuristic function to estimate the remaining travel cost from a node. If returns a non-zero value, effectively transforms the graph traversal to a A* algorithm.
 `onReach` | `Vertex => {}` | Function to apply to a vertex when it is added to the priority queue.
 `onSettle` | `Vertex => {}` | Function to apply to a vertex when it is removed from the priority queue, and added to shortest path tree.
@@ -83,14 +109,3 @@ Option | Default | Description
 Method | Returns | Description
 ---|---|---
 `next()` | `{value: Vertex, done: Boolean}` | Conforms to the [iterator protocol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#iterator). Returns an object with the next vertex added to the shortest path tree as `value`, or a `done: true` field if no more vertices are available.
-
-
-`algos.Dijkstra`
----
-
-*TODO*
-
-`algos.BidirectionalDijkstra`
----
-
-*TODO*
