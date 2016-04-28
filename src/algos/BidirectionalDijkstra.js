@@ -37,20 +37,17 @@ class BidirectionalDijkstra {
             && (inState.state === REACHED || inState.state === SETTLED);
     }
 
-    /**
-    The most common use of Dijkstra traversal
-    */
     shortestPath(source, target, options) {
         const outIteraror = new DijkstraIterator(this.graph, source,
             Object.assign({},
                 options,
-                options.heuristicOut ? { heuristic: options.heuristicOut } : {},
+                options.OUT,
                 { direction: OUT, flagKey: this.outKey })
         );
         const inIterator = new DijkstraIterator(this.graph, target,
             Object.assign({},
                 options,
-                options.heuristicIn ? { heuristic: options.heuristicIn } : {},
+                options.IN,
                 { direction: IN, flagKey: this.inKey })
         );
         this.outFlagger = new NodeFlagger(this.graph, this.outKey);

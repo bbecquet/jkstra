@@ -55,8 +55,8 @@ Constants used in contexts where it's needed to qualify the direction of travel 
 
 Constant | Description
 ---|---
-`jkStra.OUT` | represents the direction of edges going out of their origin vertices.
-`jkStra.IN` | represents the direction of edges arriving at their end vertices.
+`jkStra.OUT` | represents the direction of edges going out of their origin vertices, i.e. a forward graph traversal.
+`jkStra.IN` | represents the direction of edges arriving at their end vertices, i.e. a backward graph traversal.
 
 
 `algos.Dijkstra`
@@ -73,13 +73,24 @@ new jKstra.algos.Dijkstra(Graph graph);
 
 Method | Returns | Description
 ---|---|---
-`shortestPath(Vertex source, Vertex target, options)` | `Array<Edge>` | Returns the ordered list of edges that form the shortest path between `source` and `target` vertices, or `null` if no path has been found. Takes an `options` object of the same definition as [`DijkstraIterator`'s options](#algosdijkstraiterator).
+`shortestPath(Vertex source, Vertex target, DijkstraOptions options)` | `Array<Edge>` | Returns the ordered list of edges that form the shortest path between `source` and `target` vertices, or `null` if no path has been found.
 
 
 `algos.BidirectionalDijkstra`
 ---
 
-*TODO*
+A shortest path finder using a bidirectional Dijkstra's search, which runs both ways from source and target vertices to reduce the search space.
+
+### Constructor
+```js
+new jKstra.algos.BidirectionalDijkstra(Graph graph);
+```
+
+### Methods
+
+Method | Returns | Description
+---|---|---
+`shortestPath(Vertex source, Vertex target, DijkstraOptions options)` | `Array<Edge>` | Returns the ordered list of edges that form the shortest path between `source` and `target` vertices, or `null` if no path has been found. The `options` object can have `OUT` and `IN` properties which are also `DijkstraOptions` and will overload any global option for the concerned direction. It's useful to apply different heuristics or cost functions to the forward and backward searches.
 
 
 `algos.DijkstraIterator`
@@ -90,10 +101,20 @@ Used internally by `Dijkstra` & `BidirectionalDijkstra`.
 
 ### Constructor
 ```js
-new jKstra.algos.DijkstraIterator(Graph graph, Vertex source, options);
+new jKstra.algos.DijkstraIterator(Graph graph, Vertex source, DijkstraOptions options);
 ```
 
-<a name="dijkstra_options"></a>
+### Methods
+
+Method | Returns | Description
+---|---|---
+`next()` | `{value: Vertex, done: Boolean}` | Conforms to the [iterator protocol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#iterator). Returns an object with the next vertex added to the shortest path tree as `value`, or a `done: true` field if no more vertices are available.
+
+
+`DijkstraOptions`
+---
+
+Anonymous object shape taken as option by all Dijkstra type graph traversal methods.
 
 Option | Default | Description
 ---|---|---
@@ -103,9 +124,3 @@ Option | Default | Description
 `onReach` | `Vertex => {}` | Function to apply to a vertex when it is added to the priority queue.
 `onSettle` | `Vertex => {}` | Function to apply to a vertex when it is removed from the priority queue, and added to shortest path tree.
 `edgeFilter` | `Edge => true` | Filter to . By default all edges are considered.
-
-### Methods
-
-Method | Returns | Description
----|---|---
-`next()` | `{value: Vertex, done: Boolean}` | Conforms to the [iterator protocol](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#iterator). Returns an object with the next vertex added to the shortest path tree as `value`, or a `done: true` field if no more vertices are available.
