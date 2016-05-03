@@ -637,6 +637,23 @@ var Graph = function () {
             });
         }
     }, {
+        key: 'serialize',
+        value: function serialize() {
+            var vertices = [];
+            var edges = [];
+            this.vertices.forEach(function (v, i) {
+                vertices.push(v.data);
+                v._idx = i;
+            });
+            this.edges.forEach(function (e) {
+                edges.push([e.from._idx, e.to._idx, e.data]);
+            });
+            this.vertices.forEach(function (v) {
+                delete v._idx;
+            });
+            return { vertices: vertices, edges: edges };
+        }
+    }, {
         key: 'vertexCount',
         get: function get() {
             return this.vertices.length;
@@ -645,6 +662,18 @@ var Graph = function () {
         key: 'edgeCount',
         get: function get() {
             return this.edges.length;
+        }
+    }], [{
+        key: 'deserialize',
+        value: function deserialize(obj) {
+            var g = new Graph();
+            obj.vertices.forEach(function (v) {
+                g.addVertex(v);
+            });
+            obj.edges.forEach(function (e) {
+                g.addEdge(g.vertices[e[0]], g.vertices[e[1]], e[2]);
+            });
+            return g;
         }
     }]);
 

@@ -192,4 +192,28 @@ describe('Graph', function() {
             assert.isNull(graph.edge('CA'));
         });
     });
+
+    describe('serialize/deserialize', function() {
+        it('serializes the graph', function() {
+            const vA = graph.addVertex('A');
+            const vB = graph.addVertex('B');
+            const vC = graph.addVertex('C');
+            graph.addEdgePair(vA, vB, 'AB');
+            graph.addEdge(vC, vA, 'CA');
+            graph.addEdge(vB, vC, 'BC');
+            const obj = graph.serialize();
+            assert.equal(obj.vertices.length, 3);
+            assert.equal(obj.edges.length, 4);
+        });
+
+        it('deserializes a serialized graph', function() {
+            const graphString = '{"vertices":["A","B","C"],"edges":[[0,1,"AB"],[1,0,"AB"],[2,0,"CA"],[1,2,"BC"]]}';
+            const g = Graph.deserialize(JSON.parse(graphString));
+            assert.equal(g.vertexCount, 3);
+            assert.equal(g.edgeCount, 4);
+            assert.isNotNull(g.vertex('A'));
+            assert.isNotNull(g.edge('CA'));
+            assert.equal(g.edge('AB').to.data, 'B');
+        });
+    });
 });

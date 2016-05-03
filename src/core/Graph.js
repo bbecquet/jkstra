@@ -123,6 +123,33 @@ class Graph {
     forEachEdge(action) {
         this.edges.forEach(e => action(e));
     }
+
+    serialize() {
+        const vertices = [];
+        const edges = [];
+        this.vertices.forEach((v, i) => {
+            vertices.push(v.data);
+            v._idx = i;
+        });
+        this.edges.forEach(e => {
+            edges.push([e.from._idx, e.to._idx, e.data]);
+        });
+        this.vertices.forEach(v => { delete v._idx; });
+        return { vertices, edges };
+    }
+
+    static deserialize(obj) {
+        const g = new Graph();
+        obj.vertices.forEach(v => { g.addVertex(v); });
+        obj.edges.forEach(e => {
+            g.addEdge(
+                g.vertices[e[0]],
+                g.vertices[e[1]],
+                e[2]
+            );
+        });
+        return g;
+    }
 };
 
 export default Graph;
