@@ -16,7 +16,7 @@
     "babel": "babel ./src/ --out-dir ./dist --source-maps",
     "browserify": "browserify ./dist/jKstra.js -o ./build/jKstra.js --standalone jKstra",
     "build": "npm run babel && npm run browserify",
-    "test": "mocha --compilers js:babel-register tests"
+    "test": "mocha --require babel-core/register tests"
   },
   "babel": {
     "presets": [
@@ -45,6 +45,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "mocha": "^6.1.1",
     "updatable-priority-queue": "0.0.1"
   }
 }
