@@ -38,7 +38,8 @@
     "babel-register": "^6.7.2",
     "browserify": "^13.0.0",
     "chai": "^3.5.0",
-    "eslint": "^2.7.0"
+    "eslint": "^2.7.0",
+    "mocha": "^6.1.1"
   },
   "directories": {
     "test": "test"
