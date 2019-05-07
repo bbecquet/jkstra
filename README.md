@@ -63,6 +63,15 @@ console.log(path.map(function(e) { return e.data; }).join());
 [API](doc/API.md)
 ------
 
+Developing
+-------
+To get started developing in this package, install dependencies and use npm to run tests
+
+```bash
+npm install
+npm test
+```
+
 License
 -------
 MIT.
