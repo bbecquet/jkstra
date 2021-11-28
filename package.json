@@ -1,20 +1,20 @@
 {
   "name": "jkstra",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "Small JavaScript graph routing library",
   "author": "Benjamin Becquet",
-  "repository": "bbecquet/jKstra",
+  "repository": "bbecquet/jkstra",
   "keywords": [
     "graph",
     "routing",
     "pathfinding",
     "Dijkstra"
   ],
-  "main": "dist/jKstra.js",
+  "main": "dist/jkstra.js",
   "scripts": {
     "demo": "babel ./demo/src/ --out-dir ./demo",
     "babel": "babel ./src/ --out-dir ./dist --source-maps",
-    "browserify": "browserify ./dist/jKstra.js -o ./build/jKstra.js --standalone jKstra",
+    "browserify": "browserify ./dist/jkstra.js -o ./build/jkstra.js --standalone jkstra",
     "build": "npm run babel && npm run browserify",
     "test": "mocha --compilers js:babel-register tests"
   },

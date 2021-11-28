@@ -42,4 +42,4 @@ var jkstra = {
 
 exports.default = jkstra;
 module.exports = exports['default'];
-//# sourceMappingURL=jKstra.js.map
+//# sourceMappingURL=jkstra.js.map

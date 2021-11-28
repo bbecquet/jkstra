@@ -23,8 +23,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var DijkstraIterator = function () {
-    // take all edges
-
     function DijkstraIterator(graph, source, opts) {
         _classCallCheck(this, DijkstraIterator);
 
@@ -71,14 +69,14 @@ var DijkstraIterator = function () {
                 return { done: true };
             }
 
-            var _options = this.options;
-            var direction = _options.direction;
-            var onReach = _options.onReach;
-            var onSettle = _options.onSettle;
-            var edgeFilter = _options.edgeFilter;
-            var edgeCost = _options.edgeCost;
-            var heuristic = _options.heuristic;
-            var shouldUpdateKey = _options.shouldUpdateKey;
+            var _options = this.options,
+                direction = _options.direction,
+                onReach = _options.onReach,
+                onSettle = _options.onSettle,
+                edgeFilter = _options.edgeFilter,
+                edgeCost = _options.edgeCost,
+                heuristic = _options.heuristic,
+                shouldUpdateKey = _options.shouldUpdateKey;
 
 
             var u = this.pQ.pop().item;
@@ -151,7 +149,8 @@ DijkstraIterator.defaultOptions = {
     },
     onReach: null, // nothing special to do when reaching a node
     onSettle: null, // nothing special to do when setting a node
-    edgeFilter: null };
+    edgeFilter: null // take all edges
+};
 ;
 
 exports.default = DijkstraIterator;

@@ -90,8 +90,7 @@ var Dijkstra = function () {
 Dijkstra.defaultTraversalOptions = {
     isFinished: function isFinished() {
         return false;
-    }
-};
+    } };
 ;
 
 exports.default = Dijkstra;
